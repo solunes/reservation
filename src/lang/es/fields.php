@@ -38,5 +38,16 @@ return [
     'total_max' => 'Usuarios Máximos Totales',
     'total_min' => 'Usuarios Mínimos Totales',
     'type' => 'Tipo',
+    'active' => 'Activo',
+    'created_at' => 'Fecha de Creación',
+    'id' => 'ID',
+    'name' => 'Nombre',
+    'parent' => 'De',
+    'reservation' => 'Reserva',
+    'sale' => 'Venta',
+    'status' => 'Estado',
+    'updated_at' => 'Fecha de Edición',
+    'duration_number' => 'Duración',
+    'duration_type' => 'Tipo de Duración',
 
 ];

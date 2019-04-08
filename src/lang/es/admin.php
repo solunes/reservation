@@ -10,6 +10,7 @@ return array(
 	'1' => 'Si',
 	'active' => 'Activo',
 	'closed' => 'Cerrado',
+	'holding' => 'En Espera',
 	'finished' => 'Finalizado',
 	'cancelled' => 'Cancelado',
 	'd_01' => 'Lunes',
@@ -32,5 +33,6 @@ return array(
 	'total' => 'Total',
 	'total-amount' => 'Monto Total',
 	'week' => 'Semana',
+	'minute' => 'Minuto',
 
 );

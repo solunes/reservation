@@ -39,7 +39,7 @@ class CustomAdminController extends Controller {
 	public function findAccommodation($id) {
 		if($item = \Solunes\Reservation\App\Accommodation::find($id)){
 			if($item->interval=='hour'){
-				$subitems = \Reservation::getOccupancyDays($item, date('Y-m-d'), date("Y-m-d", strtotime("+15 days")));
+				$subitems = \Reservation::getOccupancyHours($item, date('Y-m-d'), date("Y-m-d", strtotime("+15 days")));
 			} else {
 				$subitems = \Reservation::getOccupancyHours($item, date('Y-m-d'), date("Y-m-d", strtotime("+7 days")));
 			}

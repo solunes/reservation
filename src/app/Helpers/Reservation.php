@@ -118,11 +118,12 @@ class Reservation {
 
     public static function getOccupancyHours($service, $date_start, $date_end) {
         $available_dates = \Reservation::getAvailableHours($service, $date_start, $date_end);
-        $taken_dates = ['2018-10-20'=>[
+        $taken_dates = ['2018-11-11'=>[
           ['time_in'=>'08:30:00','time_out'=>'09:30:00'],
           ['time_in'=>'10:30:00','time_out'=>'11:30:00'],
           ['time_in'=>'14:00:00','time_out'=>'18:00:00']
-        ],'2018-10-21'=>[
+        ],'2018-11-12'=>[
+          ['time_in'=>'08:30:00','time_out'=>'09:30:00']
         ]];
         $time_durations = [];
         foreach($available_dates as $available_date => $available_times){
