@@ -22,9 +22,26 @@ class ProcessController extends Controller {
 	  $this->prev = $url->previous();
 	}
 
-  public function getReservations() {
-  	$array['items'] = \App\Reservation::get();
-    return view('reservation::list.dashboard', $array);
-  }
+    public function getPackages($token) {
+      $array['page'] = \Solunes\Master\App\Page::find(1);
+      $array['items'] = \Solunes\Reservation\App\Accommodation::get();
+      return view('reservation::process.packages', $array);
+    }
+
+    public function getPackage($item_id) {
+      $array['page'] = \Solunes\Master\App\Page::find(1);
+      $array['item'] = \Solunes\Reservation\App\Accommodation::find($item_id);
+      return view('reservation::process.package-item', $array);
+    }
+
+    public function getScheduleList($token) {
+      $array['page'] = \Solunes\Master\App\Page::find(1);
+      return view('reservation::process.schedule-list', $array);
+    }
+
+    public function getScheduleBlock($token) {
+      $array['page'] = \Solunes\Master\App\Page::find(1);
+      return view('reservation::process.schedule-block', $array);
+    }
 
 }

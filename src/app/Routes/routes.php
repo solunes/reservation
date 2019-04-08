@@ -11,12 +11,11 @@
 |
 */
 
-Route::group(['prefix'=>'process'], function(){
-    Route::get('/calculate-shipping/{shipping_id}/{city_id}/{weight}', 'ProcessController@getCalculateShipping');
-});
+Route::group(['prefix'=>'reservations'], function(){
+    // Rutas para Mi Cuenta
+    Route::get('list/{token}', 'ProcessController@getPackages');
+    Route::get('item/{token}', 'ProcessController@getPackage');
+    Route::get('schedule-list/{token}', 'ProcessController@getScheduleList');
+    Route::get('schedule-group/{token}', 'ProcessController@getScheduleBlock');
 
-Route::group(['prefix'=>'gitlab'], function(){
-    Route::get('/group-reservations/{group_name}', 'GitlabController@getGroupReservations');
-    Route::get('/reservation/{reservation_name}/{group_name}', 'GitlabController@getReservation');
-    Route::get('/reservation-commits/{reservation_name}/{group_name}', 'GitlabController@getReservationCommits');
 });
