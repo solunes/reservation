@@ -20,7 +20,9 @@ class NodesReservation extends Migration
             $table->enum('interval', ['hour','day'])->default('hour');
             $table->enum('pricing', ['free','pay-in-place','parcial','total'])->default('free');
             $table->enum('pricing_type', ['per-person','total-amount'])->default('per-person');
-            $table->integer('price')->nullable();
+            $table->integer('currency_id')->nullable()->default(1);
+            $table->integer('price')->nullable()->default(1);
+            $table->integer('capicity')->nullable()->default(1);
             $table->integer('duration_number')->nullable();
             $table->enum('duration_type', ['minute','hour','day'])->default('minute');
             $table->integer('total_min')->nullable();
@@ -36,9 +38,12 @@ class NodesReservation extends Migration
             $table->increments('id');
             $table->integer('parent_id')->unsigned();
             $table->enum('initial_day', ['d_01','d_02','d_03','d_04','d_05','d_06','d_07'])->default('d_01');
-            $table->integer('duration_nights')->default(0);
+            $table->integer('duration_nights')->nullable()->default(0);
+            $table->date('max_reservation_days')->nullable()->default(90);
             $table->time('initial_time')->nullable();
             $table->time('end_time')->nullable();
+            $table->integer('capacity')->nullable(); // Toma por defecto de evento
+            $table->decimal('price', 10, 2)->nullable(); // Toma por defecto de evento
             $table->timestamps();
             $table->foreign('parent_id')->references('id')->on('accommodations')->onDelete('cascade');
         });
@@ -50,8 +55,8 @@ class NodesReservation extends Migration
             $table->date('end_date')->nullable();
             $table->time('initial_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->integer('capacity')->default(1);
-            $table->decimal('price', 10, 2)->default(0);
+            $table->integer('capacity')->nullable(); // Toma por defecto de evento
+            $table->decimal('price', 10, 2)->nullable(); // Toma por defecto de evento
             $table->timestamps();
             $table->foreign('parent_id')->references('id')->on('accommodations')->onDelete('cascade');
         });
@@ -60,6 +65,7 @@ class NodesReservation extends Migration
             $table->integer('parent_id')->unsigned();
             $table->integer('customer_id')->unsigned();
             $table->integer('reservation_id')->nullable();
+            $table->integer('users_count')->nullable();
             $table->date('initial_date')->nullable();
             $table->date('end_date')->nullable();
             $table->time('initial_time')->nullable();
@@ -74,6 +80,7 @@ class NodesReservation extends Migration
             $table->integer('customer_id')->unsigned();
             $table->integer('sale_id')->unsigned();
             $table->string('name')->nullable();
+            $table->decimal('price', 10, 2)->nullable();
             $table->date('initial_date')->nullable();
             $table->date('end_date')->nullable();
             $table->time('initial_time')->nullable();

@@ -30,7 +30,7 @@
             </div>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
             <h3 class="cost"><span class="glyphicon glyphicon-usd"></span> US$ {{ $item->price }} <small class="pre-cost"><span class="glyphicon glyphicon-usd"></span> US$ 50.00 por persona</small></h3>
-            <div class="row pt-30">
+            <!--<div class="row pt-30">
               <div class="col-md-4 col-sm-6 col-xs-12">
                 <select class="form-control" name="select">
                   <option value="" selected="">Hotel 4 Estrellas</option>
@@ -40,7 +40,6 @@
                   <option value="rose gold">Catálogo de productos</option>
                 </select>
               </div>
-              <!-- end col -->
               <div class="col-md-4 col-sm-6 col-xs-12">
                 <select class="form-control" name="select">
                   <option value="">Capacidad</option>
@@ -50,7 +49,6 @@
                   <option value="">128GB</option>
                 </select>
               </div>
-              <!-- end col -->
               <div class="col-md-4 col-sm-12">
                 <select class="form-control" name="select">
                   <option value="" selected="">Paseo en Bote</option>
@@ -59,13 +57,15 @@
                   <option value="">3</option>
                 </select>
               </div>
-              <!-- end col -->
+            -->
             </div>
             <div class="space-ten"></div>
             <br>
             <div class="btn-ground pt-4">
-              <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Anadir al carrito</button>
-              <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-heart"></span> Comprar</button>
+              <!--<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Anadir al carrito</button>-->
+              <a href="{{ $item->reservation_link }}">
+                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-heart"></span> Reservar</button>
+              </a>
             </div>
           </div>
         </div>
