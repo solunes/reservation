@@ -53,4 +53,23 @@ class Accommodation extends Model {
         return $this->hasMany('Solunes\Reservation\App\AccommodationPick', 'parent_id');
     }
 
+    public function getReservationLinkAttribute() {
+    	if($this->type=='closed'){
+        	return url('reservations/schedule-list/3846134');
+    	} else {
+        	return url('reservations/schedule-group/9421457');
+    	}
+    }
+
+    public function getItemsAttribute() {
+    	$date_start = date('Y-m-d');
+		$date_end = strtotime($date_start);
+		$date_end = strtotime("+7 days", $date_end);
+    	if($this->type=='day'){
+        	return \Reservation::getAvailableDays($this, $date_start, $date_end);
+    	} else {
+        	return \Reservation::getAvailableHours($this, $date_start, $date_end);
+    	}
+    }
+
 }

@@ -15,7 +15,8 @@ Route::group(['prefix'=>'reservations'], function(){
     // Rutas para Mi Cuenta
     Route::get('list/{token}', 'ProcessController@getPackages');
     Route::get('item/{token}', 'ProcessController@getPackage');
-    Route::get('schedule-list/{token}', 'ProcessController@getScheduleList');
-    Route::get('schedule-group/{token}', 'ProcessController@getScheduleBlock');
+    Route::get('schedule-list/{accommodation_id}', 'ProcessController@getScheduleList');
+    Route::get('schedule-group/{accommodation_id}', 'ProcessController@getScheduleBlock');
+    Route::get('finish-reservation/{token}', 'ProcessController@getScheduleBlock');
 
 });

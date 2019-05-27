@@ -24,19 +24,15 @@
             </tr>
           </thead>
           
+          @foreach($item->items as $subdate => $subitems)
+          <?php \Log::info($subdate.' - '.json_encode($subitems)); ?>
           <thead class="bg-secondary text-white">
-            <td>Lunes</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td colspan="7">{{ $subdate }}</td>
           </thead>
-          
           <tbody>
+            @foreach($subitems as $key => $subitem)
             <tr>
-              <th scope="row">7:00 AM</th>
+              <th scope="row">{{ json_encode($subitem) }}</th>
               <td>Yoga - Beginners</td>
               <td>Eduardo Galeano</td>
               <td>15</td>
@@ -44,163 +40,9 @@
               <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
               <td><a class="btn btn-secondary btn-sm  text-white">Info</a></td>
             </tr>
-            <tr>
-              <th scope="row">8:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Eduardo Galeano</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">9:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Eduardo Galeano</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">10:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Eduardo Galeano</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">11:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Eduardo Galeano</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">12:00 PM</th>
-              <td>Yoga - Beginners</td>
-              <td>Eduardo Galeano</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
+            @endforeach
           </tbody>
-          
-          <thead class="bg-secondary text-white">
-            <td>Martes</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </thead>
-          
-          <tbody>
-            <tr>
-              <th scope="row">7:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Camila Egger</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">8:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Camila Egger</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">9:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Camila Egger</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">10:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Camila Egger</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-          </tbody>
-
-          <thead class="bg-secondary text-white">
-            <td>Jueves</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </thead>
-          
-          <tbody>
-            <tr>
-              <th scope="row">7:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Camila Egger</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">8:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Camila Egger</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">9:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Camila Egger</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-            <tr>
-              <th scope="row">10:00 AM</th>
-              <td>Yoga - Beginners</td>
-              <td>Camila Egger</td>
-              <td>15</td>
-              <td>$20</td>
-              <td><a class="btn btn-primary btn-sm text-white">Reservar</a></td>
-              <td><a class="btn btn-secondary btn-sm text-white">Info</a></td>
-            </tr>
-            
-          </tbody>
-          
+          @endforeach
         </table>                        
       </div>
     </div>
