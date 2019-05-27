@@ -11,14 +11,12 @@ class ReservationUser extends Model {
 
 	/* Creating rules */
 	public static $rules_create = array(
-		'parent_id'=>'required',
 		'first_name'=>'required',
 		'last_name'=>'required',
 	);
 
 	/* Updating rules */
 	public static $rules_edit = array(
-		'parent_id'=>'required',
 		'first_name'=>'required',
 		'last_name'=>'required',
 	);

@@ -38,6 +38,11 @@
     border-color: #102254; }
   .solunes-reservation .bg-primary {
     background-color: #102254 !important; }
+
+  .card-header {
+    background: #080b2c;
+  }
+
   @media (min-width: 768px) {
     .solunes-reservation .col-xs-5 {
       float: left;

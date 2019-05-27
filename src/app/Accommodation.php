@@ -53,11 +53,23 @@ class Accommodation extends Model {
         return $this->hasMany('Solunes\Reservation\App\AccommodationPick', 'parent_id');
     }
 
+    public function reservations() {
+        return $this->hasMany('Solunes\Reservation\App\Reservation');
+    }
+
+    public function active_reservations() {
+        return $this->hasMany('Solunes\Reservation\App\Reservation')->whereIn('status', ['pre-reserve','sale','paid','finished']);
+    }
+
+    public function product_bridge() {
+        return $this->hasOne('Solunes\Business\App\ProductBridge')->where('product_type', 'accommodation');
+    }
+
     public function getReservationLinkAttribute() {
     	if($this->type=='closed'){
-        	return url('reservations/schedule-list/3846134');
+        	return url('reservations/schedule-list');
     	} else {
-        	return url('reservations/schedule-group/9421457');
+        	return url('reservations/schedule-group');
     	}
     }
 
@@ -65,10 +77,11 @@ class Accommodation extends Model {
     	$date_start = date('Y-m-d');
 		$date_end = strtotime($date_start);
 		$date_end = strtotime("+7 days", $date_end);
+        $date_end = date('Y-m-d', $date_end);
     	if($this->type=='day'){
-        	return \Reservation::getAvailableDays($this, $date_start, $date_end);
+        	return \Reservation::getAvailableDays($this, $date_start, $date_end); // Mezclar con occupancy
     	} else {
-        	return \Reservation::getAvailableHours($this, $date_start, $date_end);
+        	return \Reservation::getOccupancyHours($this, $date_start, $date_end);
     	}
     }
 

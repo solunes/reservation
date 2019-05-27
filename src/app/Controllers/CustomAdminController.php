@@ -41,7 +41,7 @@ class CustomAdminController extends Controller {
 			if($item->interval=='hour'){
 				$subitems = \Reservation::getOccupancyHours($item, date('Y-m-d'), date("Y-m-d", strtotime("+15 days")));
 			} else {
-				$subitems = \Reservation::getOccupancyHours($item, date('Y-m-d'), date("Y-m-d", strtotime("+7 days")));
+				$subitems = \Reservation::getOccupancyHours($item, date('Y-m-d'), date("Y-m-d", strtotime("+30 days")));
 			}
 			$array = ['item'=>$item, 'subitems'=>$subitems];
       		return view('reservation::item.accommodation', $array);

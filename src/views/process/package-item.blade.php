@@ -19,54 +19,46 @@
             </div>                            
           </div>
           <div class="col-md-6 product_content">
-            <h4 class="text-primary">Código #<span>51526</span></h4>
+            <h4 class="text-primary">Código #<span>{{ $item->id }}</span></h4>
             <div class="rating">
-              <span class="glyphicon glyphicon-star"></span>
-              <span class="glyphicon glyphicon-star"></span>
-              <span class="glyphicon glyphicon-star"></span>
-              <span class="glyphicon glyphicon-star"></span>
-              <span class="glyphicon glyphicon-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
               (10 recomendaciones)
             </div>
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-            <h3 class="cost"><span class="glyphicon glyphicon-usd"></span> US$ {{ $item->price }} <small class="pre-cost"><span class="glyphicon glyphicon-usd"></span> US$ 50.00 por persona</small></h3>
-            <!--<div class="row pt-30">
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <select class="form-control" name="select">
-                  <option value="" selected="">Hotel 4 Estrellas</option>
-                  <option value="black">Sitio web</option>
-                  <option value="white">Pasarela de pagos</option>
-                  <option value="gold">Tienda online</option>
-                  <option value="rose gold">Catálogo de productos</option>
-                </select>
+            <form method="post" action="{{ url('reservations/start-reservation') }}">
+              @if($item->total_max>1)
+              <h3 class="cost"><span class="glyphicon glyphicon-usd"></span> Precio por Persona: Bs. {{ $item->price }}
+                <!--<small class="pre-cost"><span class="glyphicon glyphicon-usd"></span> Bs. 50.00 por persona</small>-->
+              </h3>
+              <div class="row pt-30">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <select class="form-control" name="counts">
+                    @foreach(range($item->total_min, $item->total_max) as $count)
+                      <option value="{{ $count }}">{{ $count }}</option>
+                    @endforeach
+                  </select>
+                </div>
               </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <select class="form-control" name="select">
-                  <option value="">Capacidad</option>
-                  <option value="">16GB</option>
-                  <option value="">32GB</option>
-                  <option value="">64GB</option>
-                  <option value="">128GB</option>
-                </select>
+              @else
+              <h3 class="cost"><span class="glyphicon glyphicon-usd"></span> Precio: Bs. {{ $item->price }}
+                <!--<small class="pre-cost"><span class="glyphicon glyphicon-usd"></span> Bs. 50.00 por persona</small>-->
+              </h3>
+                <input type="hidden" name="counts" value="1" />
+              @endif
+              <div class="space-ten"></div>
+              <br>
+              <div class="btn-ground pt-4">
+                <!--<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Anadir al carrito</button>-->
+                <!--<a href="{{ $item->reservation_link.'/'.$item->id }}">-->
+                  <input type="hidden" name="accommodation_id" value="{{ $item->id }}" />
+                  <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-heart"></span> Reservar</button>
+                <!--</a>-->
               </div>
-              <div class="col-md-4 col-sm-12">
-                <select class="form-control" name="select">
-                  <option value="" selected="">Paseo en Bote</option>
-                  <option value="">1</option>
-                  <option value="">2</option>
-                  <option value="">3</option>
-                </select>
-              </div>
-            -->
-            </div>
-            <div class="space-ten"></div>
-            <br>
-            <div class="btn-ground pt-4">
-              <!--<button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span> Anadir al carrito</button>-->
-              <a href="{{ $item->reservation_link }}">
-                <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-heart"></span> Reservar</button>
-              </a>
-            </div>
+            </form>
           </div>
         </div>
       </div>

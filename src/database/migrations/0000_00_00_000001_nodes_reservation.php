@@ -16,6 +16,8 @@ class NodesReservation extends Migration
         Schema::create('accommodations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
+            $table->text('summary')->nullable();
+            $table->text('content')->nullable();
             $table->enum('type', ['open','closed'])->default('open');
             $table->enum('interval', ['hour','day'])->default('hour');
             $table->enum('pricing', ['free','pay-in-place','parcial','total'])->default('free');
@@ -39,7 +41,7 @@ class NodesReservation extends Migration
             $table->integer('parent_id')->unsigned();
             $table->enum('initial_day', ['d_01','d_02','d_03','d_04','d_05','d_06','d_07'])->default('d_01');
             $table->integer('duration_nights')->nullable()->default(0);
-            $table->date('max_reservation_days')->nullable()->default(90);
+            $table->integer('max_reservation_days')->nullable()->default(90);
             $table->time('initial_time')->nullable();
             $table->time('end_time')->nullable();
             $table->integer('capacity')->nullable(); // Toma por defecto de evento
@@ -77,28 +79,44 @@ class NodesReservation extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('accommodation_id')->unsigned();
-            $table->integer('customer_id')->unsigned();
-            $table->integer('sale_id')->unsigned();
+            $table->integer('user_id')->nullable();
+            $table->integer('customer_id')->nullable();
+            $table->integer('sale_id')->nullable();
+            $table->integer('currency_id')->nullable();
             $table->string('name')->nullable();
+            $table->integer('counts')->default(1);
             $table->decimal('price', 10, 2)->nullable();
+            $table->decimal('amount', 10, 2)->nullable();
             $table->date('initial_date')->nullable();
             $table->date('end_date')->nullable();
             $table->time('initial_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->enum('status', ['holding','sale','paid','finished','cancelled'])->default('holding');
+            $table->boolean('invoice')->nullable();
+            $table->integer('invoice_number')->nullable();
+            $table->string('invoice_name')->nullable();
+            $table->enum('status', ['holding','pre-reserve','sale','paid','finished','cancelled'])->default('holding');
             $table->timestamps();
             $table->foreign('accommodation_id')->references('id')->on('accommodations')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
         });
         Schema::create('reservation_users', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id')->unsigned();
             $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('ci_number')->nullable();
-            $table->string('cellphone')->nullable();
-            $table->integer('age')->nullable();
+            if(config('reservation.reservation_subuser_name')){
+                $table->string('last_name')->nullable();
+            }
+            if(config('reservation.reservation_subuser_username')){
+                $table->string('ci_number')->nullable();
+            }
+            if(config('reservation.reservation_subuser_cellphone')){
+                $table->string('cellphone')->nullable();
+            }
+            if(config('reservation.reservation_subuser_email')){
+                $table->integer('email')->nullable();
+            }
+            if(config('reservation.reservation_subuser_age')){
+                $table->integer('age')->nullable();
+            }
             $table->timestamps();
             $table->foreign('parent_id')->references('id')->on('reservations')->onDelete('cascade');
         });
