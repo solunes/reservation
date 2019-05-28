@@ -66,7 +66,7 @@ class Accommodation extends Model {
     }
 
     public function getReservationLinkAttribute() {
-    	if($this->type=='closed'){
+    	if(config('reservation.type')=='list'){
         	return url('reservations/schedule-list');
     	} else {
         	return url('reservations/schedule-group');

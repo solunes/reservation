@@ -1,6 +1,6 @@
 {
     "name": "solunes/reservation",
-    "description": "Paquete adicional de Proyectos para Solunes Digital.",
+    "description": "Paquete adicional de Reservas para Solunes Digital.",
     "keywords": ["laravel", "solunes", "reservation"],
     "license": "MIT",
     "authors": [

@@ -4,6 +4,7 @@ return [
 
 	// GENERAL
 	'after_seed' => true,
+	'type' => 'list',
 	'reservation_subuser_name' => true,
 	'reservation_subuser_cellphone' => false,
 	'reservation_subuser_email' => false,

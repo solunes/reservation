@@ -37,7 +37,9 @@ class AccommodationSaved
             $product_bridge->product_internal_code = $event->product_internal_code;
             $product_bridge->product_serial_number = $event->product_serial_number;
         }
-        $product_bridge->stockable = 0;
+        if(config('solunes.inventory')){
+            $product_bridge->stockable = 0;
+        }
         $product_bridge->save();
         return $event;
     }
