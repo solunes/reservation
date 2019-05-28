@@ -62,7 +62,7 @@ class Accommodation extends Model {
     }
 
     public function product_bridge() {
-        return $this->hasOne('Solunes\Business\App\ProductBridge')->where('product_type', 'accommodation');
+        return $this->hasOne('Solunes\Business\App\ProductBridge','product_id')->where('product_type', 'accommodation');
     }
 
     public function getReservationLinkAttribute() {

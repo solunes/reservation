@@ -22,6 +22,11 @@ class MasterSeeder extends Seeder {
         $node_reservation = \Solunes\Master\App\Node::create(['name'=>'reservation', 'location'=>'reservation', 'folder'=>'reservation']);
         $node_reservaton_user = \Solunes\Master\App\Node::create(['name'=>'reservation-user', 'location'=>'reservation', 'folder'=>'reservation', 'type'=>'child', 'parent_id'=>$node_reservation->id]);
 
+        $image_folder = \Solunes\Master\App\ImageFolder::create(['site_id'=>1, 'name'=>'accommodation-image', 'extension'=>'jpg']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'normal', 'type'=>'resize', 'width'=>'800']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'thumb', 'type'=>'fit', 'width'=>'300', 'height'=>'200']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'semi', 'type'=>'fit', 'width'=>'450', 'height'=>'300']);
+
         // Usuarios
         $admin = \Solunes\Master\App\Role::where('name', 'admin')->first();
         $member = \Solunes\Master\App\Role::where('name', 'member')->first();

@@ -146,6 +146,8 @@ class ProcessController extends Controller {
       $reservation->amount = $reservation->price * $reservation->counts;
       $reservation->status = 'sale';
       $reservation->save();
+
+      $sale_details = [];
       $reservation_user = new \Solunes\Reservation\App\ReservationUser;
       $reservation_user->parent_id = $reservation->id;
       $reservation_user->first_name = $customer->name;
@@ -162,8 +164,8 @@ class ProcessController extends Controller {
         $reservation_user->cellphone = $request->input('cellphone');
       }
       $reservation_user->save();
+      $sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>1, 'amount'=>$reservation->price, 'detail'=>$reservation->name];
 
-      $sale_details = [];
       if($request->input('counts')>1){
         foreach(range(2, $request->input('counts')) as $subcount){
           $reservation_user = new \Solunes\Reservation\App\ReservationUser;

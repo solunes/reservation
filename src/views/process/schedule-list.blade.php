@@ -21,13 +21,13 @@
               <th scope="col">Cupos</th>
               <th scope="col">Total</th>
               <th scope="col"></th>
-              <th scope="col"></th>
+              <!--<th scope="col"></th>-->
             </tr>
           </thead>
           
           @foreach($item->items as $subdate => $subitems)
-          <thead class="bg-secondary text-white">
-            <td colspan="7">{{ $subdate }}</td>
+          <thead class="bg-secondary">
+            <td class="center" colspan="7">{{ $subdate }}</td>
           </thead>
           <tbody>
             @foreach($subitems as $key => $subitem)
@@ -38,9 +38,9 @@
               <tr class=" @if(!$free) taken-block @endif ">
                 <th scope="row">{{ $subitem['time_in'] }}</th>
                 <td>{{ $subitem['time_out'] }}</td>
-                <td>Yoga - Beginners - Eduardo Galeano</td>
-                <td>15</td>
-                <td>$20</td>
+                <td>{{ $item->name }}</td>
+                <td>{{ $item->capicity }}</td>
+                <td>Bs. {{ $item->price }}</td>
                 <td>
                   @if($free)
                   <a href="{{ url('reservations/pick-schedule-reservation/'.$item->id.'/'.$reservation->id.'/'.$subdate.'/'.$subdate.'/'.$subitem['time_in'].'/'.$subitem['time_out']) }}" class="btn btn-primary btn-sm text-white">Reservar</a>
@@ -48,7 +48,7 @@
                   <button class="btn btn-primary btn-sm text-white" disabled="true">NO DISPONIBLE</button>
                   @endif
                 </td>
-                <td><a class="btn btn-secondary btn-sm  text-white">Info</a></td>
+                <!--<td><a class="btn btn-secondary btn-sm  text-white">Info</a></td>-->
               </tr>
             @endforeach
           </tbody>

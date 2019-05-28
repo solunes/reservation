@@ -16,8 +16,6 @@ class NodesReservation extends Migration
         Schema::create('accommodations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
-            $table->text('summary')->nullable();
-            $table->text('content')->nullable();
             $table->enum('type', ['open','closed'])->default('open');
             $table->enum('interval', ['hour','day'])->default('hour');
             $table->enum('pricing', ['free','pay-in-place','parcial','total'])->default('free');
@@ -27,6 +25,9 @@ class NodesReservation extends Migration
             $table->integer('capicity')->nullable()->default(1);
             $table->integer('duration_number')->nullable();
             $table->enum('duration_type', ['minute','hour','day'])->default('minute');
+            $table->string('image')->nullable();
+            $table->text('summary')->nullable();
+            $table->text('content')->nullable();
             $table->integer('total_min')->nullable();
             $table->integer('total_max')->nullable();
             $table->integer('min_advance_number')->nullable();

@@ -15,20 +15,20 @@
           <div class="col-md-6 product_img">                        
             <h3 class="modal-title text-primary mb-4">{{ $item->name }}</h3>
             <div>
-              <img width="90%" src="assets/images/1.jpg" class="img-responsive">
+              <img width="90%" src="{{ asset(\Asset::get_image_path('accommodation-image', 'semi', $item->image)) }}" class="img-responsive">
             </div>                            
           </div>
           <div class="col-md-6 product_content">
             <h4 class="text-primary">Código #<span>{{ $item->id }}</span></h4>
-            <div class="rating">
+            <!--<div class="rating">
               <span class="fa fa-star"></span>
               <span class="fa fa-star"></span>
               <span class="fa fa-star"></span>
               <span class="fa fa-star"></span>
               <span class="fa fa-star"></span>
               (10 recomendaciones)
-            </div>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+            </div>-->
+            <p>{{ $item->summary }}</p>
             <form method="post" action="{{ url('reservations/start-reservation') }}">
               @if($item->total_max>1)
               <h3 class="cost"><span class="glyphicon glyphicon-usd"></span> Precio por Persona: Bs. {{ $item->price }}

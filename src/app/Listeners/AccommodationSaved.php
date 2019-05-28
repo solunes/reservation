@@ -2,7 +2,7 @@
 
 namespace Solunes\Reservation\App\Listeners;
 
-class AccommdationSaved
+class AccommodationSaved
 {
 
     /**
@@ -24,7 +24,7 @@ class AccommdationSaved
         }
         $product_bridge->price = $event->price;
         $product_bridge->name = $event->name;
-        $image = \Asset::get_image_path('product-image','normal',$event->image);
+        $image = \Asset::get_image_path('accommodation-image','normal',$event->image);
         $product_bridge->image = \Asset::upload_image(asset($image),'product-bridge-image');
         $product_bridge->content = $event->content;
         $product_bridge->active = $event->active;

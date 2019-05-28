@@ -25,11 +25,11 @@
               @if($free)
               <a href="{{ url('reservations/pick-schedule-reservation/'.$item->id.'/'.$reservation->id.'/'.$subdate.'/'.$subdate.'/'.$subitem['time_in'].'/'.$subitem['time_out']) }}" class="select">
               @endif
-                <div class="rounded text-white bg-secondary mb-3 @if(!$free) taken-block @endif ">
+                <div class="rounded text-white center bg-secondary mb-3 @if(!$free) taken-block @endif ">
                   <div class="card-header">{{ $subitem['time_in'] }} - {{ $subitem['time_out'] }}</div>
                   <div class="card-body">
-                    <h5 class="card-title">Yoga - Beginners - Eduardo Galeano</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <h5 class="card-title">{{ $item->name }}</h5>
+                    <p class="card-text">Bs. {{ $item->price }}</p>
                   </div>
                   @if($free)
                   <div class="card-footer bg-transparent border-light">RESERVAR</div>
