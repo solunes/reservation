@@ -11,7 +11,7 @@
   <div class="container">
     <div class="box-primary">
       <div class="row">
-        <table class="table">
+        <table class="table" id="customers">
           
           <thead class="bg-primary text-white">
             <tr>
@@ -36,14 +36,14 @@
                 <?php $free = false; ?>
               @endif
               <tr class=" @if(!$free) taken-block @endif ">
-                <th scope="row">{{ $subitem['time_in'] }}</th>
+                <td>{{ $subitem['time_in'] }}</td>
                 <td>{{ $subitem['time_out'] }}</td>
                 <td>{{ $item->name }}</td>
                 <td>{{ $item->capicity }}</td>
                 <td>Bs. {{ $item->price }}</td>
                 <td>
                   @if($free)
-                  <a href="{{ url('reservations/pick-schedule-reservation/'.$item->id.'/'.$reservation->id.'/'.$subdate.'/'.$subdate.'/'.$subitem['time_in'].'/'.$subitem['time_out']) }}" class="btn btn-primary btn-sm text-white">Reservar</a>
+                  <a href="{{ url('reservations/pick-schedule-reservation/'.$item->id.'/'.$reservation->id.'/'.$subdate.'/'.$subdate.'/'.$subitem['time_in'].'/'.$subitem['time_out']) }}" class="btn">Reservar</a>
                   @else
                   <button class="btn btn-primary btn-sm text-white" disabled="true">NO DISPONIBLE</button>
                   @endif

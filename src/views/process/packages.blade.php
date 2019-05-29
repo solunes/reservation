@@ -18,20 +18,20 @@
 					<div class="box">
 						<img class="card-img-top" src="{{ asset(\Asset::get_image_path('accommodation-image', 'thumb', $item->image)) }}" alt="Card image cap">
 						<div class="card-body">
-							<h5 class="card-title text-primary">{{ $item->name }}</h5>
+							<h3>{{ $item->name }}</h3>
 							<p class="card-text">Some quick example text to build on the card title and make up the bulk
 								of the card's
 								content.</p>
 							<div class="row">
-								<div class="col-sm-6 text-muted">
+								<div class="col-md-6 text-muted">
 									<p>Información</p>
 								</div>
-								<div class="col-sm-6">
+								<div class="col-md-6">
 									<h1 class="card-title pricing-card-title">Bs. {{ $item->price }}</h1>
 								</div>
 							</div>
 							<a href="{{ url('reservations/item/'.$item->id) }}"
-								class="btn btn-primary btn-block">Reservar</a>
+								class="btn">Reservar</a>
 						</div>
 						<!-- <div class="card-footer">
 							<div class="row">
