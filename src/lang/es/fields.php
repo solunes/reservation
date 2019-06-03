@@ -49,5 +49,18 @@ return [
     'updated_at' => 'Fecha de Edición',
     'duration_number' => 'Duración',
     'duration_type' => 'Tipo de Duración',
+    'amount' => 'Monto',
+    'capicity' => 'Capacidad',
+    'content' => 'Contenido',
+    'counts' => 'Contador',
+    'currency' => 'Moneda',
+    'image' => 'Imagen',
+    'invoice' => '¿Factura?',
+    'invoice_name' => 'Nombre de Factura',
+    'invoice_number' => 'NIT de Factura',
+    'max_reservation_days' => 'Días Máximos de Reserva',
+    'summary' => 'Resumen',
+    'user' => 'Usuario',
+    'users_count' => 'Contador de Usuarios',
 
 ];

@@ -34,5 +34,6 @@ return array(
 	'total-amount' => 'Monto Total',
 	'week' => 'Semana',
 	'minute' => 'Minuto',
+	'pre-reserve' => 'Pre Reserva',
 
 );
