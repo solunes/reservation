@@ -27,6 +27,10 @@ class AccommodationSaved
         $image = \Asset::get_image_path('accommodation-image','normal',$event->image);
         $product_bridge->image = \Asset::upload_image(asset($image),'product-bridge-image');
         $product_bridge->content = $event->content;
+        $product_bridge->delivery_type = 'reservation';
+        if(config('reservation.accommodation_sold_content')){
+            $product_bridge->sold_content = $event->sold_content;
+        }
         $product_bridge->active = $event->active;
         if(config('payments.sfv_version')>1||config('payments.discounts')){
             $product_bridge->discount_price = $event->discount_price;

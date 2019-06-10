@@ -27,6 +27,9 @@ class NodesReservation extends Migration
             $table->enum('duration_type', ['minute','hour','day'])->default('minute');
             $table->string('image')->nullable();
             $table->text('summary')->nullable();
+            if(config('reservation.accommodation_sold_content')){
+                $table->text('sold_content')->nullable();
+            }
             $table->text('content')->nullable();
             $table->integer('total_min')->nullable();
             $table->integer('total_max')->nullable();
