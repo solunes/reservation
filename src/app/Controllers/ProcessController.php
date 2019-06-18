@@ -57,6 +57,9 @@ class ProcessController extends Controller {
     $array['page'] = \Solunes\Master\App\Page::find(1);
     $array['item'] = \Solunes\Reservation\App\Accommodation::find($accommodation_id);
     $array['reservation'] = \Solunes\Reservation\App\Reservation::find($reservation_id);
+    if($array['reservation']->status!='holding'&&$array['reservation']->status!='pre-reserve'){
+      return redirect('reservations/item/'.$accommodation_id)->with('message_success', 'Su reserva ya fue marcada como preventa, por lo tanto debe iniciar una nueva reserva.');
+    }
     return view('reservation::process.schedule-list', $array);
   }
 
@@ -64,6 +67,9 @@ class ProcessController extends Controller {
     $array['page'] = \Solunes\Master\App\Page::find(1);
     $array['item'] = \Solunes\Reservation\App\Accommodation::find($accommodation_id);
     $array['reservation'] = \Solunes\Reservation\App\Reservation::find($reservation_id);
+    if($array['reservation']->status!='holding'&&$array['reservation']->status!='pre-reserve'){
+      return redirect('reservations/item/'.$accommodation_id)->with('message_success', 'Su reserva ya fue marcada como preventa, por lo tanto debe iniciar una nueva reserva.');
+    }
     return view('reservation::process.schedule-block', $array);
   }
 
@@ -98,6 +104,7 @@ class ProcessController extends Controller {
     }
     $array['user'] = $user;
     $array['customer'] = $customer;
+    $array['payment_options'] = \Solunes\Payments\App\PaymentMethod::active()->order()->lists('name','id');
     return view('reservation::process.finish-reservation', $array);
   }
 
@@ -194,7 +201,7 @@ class ProcessController extends Controller {
       }
       $reservation->load('reservation_users');
 
-      $sale = \Sales::generateSale($reservation->user_id, $reservation->customer_id, $reservation->currency_id, 2, $reservation->invoice, $reservation->invoice_name, $reservation->invoice_number, $sale_details);
+      $sale = \Sales::generateSale($reservation->user_id, $reservation->customer_id, $reservation->currency_id, $request->input('payment_method_id'), $reservation->invoice, $reservation->invoice_name, $reservation->invoice_number, $sale_details);
 
       // Send Email
       $vars = ['@name@'=>$user->name, '@total_cost@'=>$sale->total_cost, '@sale_link@'=>url('process/sale/'.$sale->id)];
