@@ -22,8 +22,9 @@ class Reservation {
         if($service->type=='open'){
           $items = $service->accommodation_ranges;
           $subarray = [];
+          $minutes_interval = \Reservation::getMinutePeriods($service);
           foreach($items as $item){
-            $subarray[$item->initial_day][] = ['time_in'=>$item->initial_time,'date_out'=>NULL,'time_out'=>$item->end_time];
+            $subarray = \Reservation::getSeparateTimePeriods($subarray, $item->initial_day, NULL, $item->initial_time, strtotime($item->end_time), $minutes_interval);
           }
           \Log::info('checking: '.$date_end);
           if($date_start==$date_end){
@@ -59,7 +60,7 @@ class Reservation {
           $items = $service->accommodation_ranges;
           $subarray = [];
           foreach($items as $item){
-            $subarray[$item->initial_day][] = ['time_in'=>$item->initial_time,'date_out'=>NULL,'time_out'=>$item->end_time];
+            $subarray = \Reservation::getSeparateTimePeriods($subarray, $item->initial_day, NULL, $item->initial_time, strtotime($item->end_time), $minutes_interval);
           }
           if($date_start==$date_end){
             $period = [$date_start];
@@ -86,6 +87,29 @@ class Reservation {
         return $array;
     }
 
+    public static function getMinutePeriods($service) {
+      $duration = $service->duration_number;
+      if($service->duration_type=='minute'){
+        return $duration;
+      } else if($service->duration_type=='hour'){
+        return $duration*60;
+      } else if($service->duration_type=='day'){
+        return $duration*60*24;
+      }
+      return $duration;
+    }
+
+    public static function getSeparateTimePeriods($subarray, $initial_day, $date_out, $initial_time, $end_timestamp, $minutes_interval) {
+      $initial_timestamp = strtotime(date('Y-m-d').' '.$initial_time);
+      $new_end_time_timestamp = strtotime('+'.$minutes_interval.' minutes', $initial_timestamp);
+      $next_end_time_timestamp = strtotime('+'.$minutes_interval.' minutes', $new_end_time_timestamp);
+      $real_end_time = date('H:i:s', $new_end_time_timestamp);
+      $subarray[$initial_day][] = ['time_in'=>$initial_time,'date_out'=>$date_out,'time_out'=>$real_end_time];
+      if($next_end_time_timestamp<=$end_timestamp){
+        $subarray = \Reservation::getSeparateTimePeriods($subarray, $initial_day, $date_out, $real_end_time, $end_timestamp, $minutes_interval);
+      }
+      return $subarray;
+    }
 
     public static function getTakenHours($service, $date_start, $date_end) {
         $array = [];

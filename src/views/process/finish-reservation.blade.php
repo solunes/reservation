@@ -147,6 +147,12 @@
 										  <input name="nit_social" type="text" class="form-control" @if($customer) value="{{ $customer->nit_name }}" @endif placeholder="Razón Social" />
 									  </div>
 								  </div>
+								  <div class="form-group">
+									  <label for="inputPassword3" class="col-sm-12 control-label">Método de Pago</label>
+									  <div class="col-sm-12">
+      									{!! Form::select('payment_method_id', $payment_options, NULL, ['id'=>'payment_id','class'=>'form-control']) !!}
+									  </div>
+								  </div>
 								  @if(!$customer)
 								  <div class="form-group">
 									  <label for="inputPassword3" class="col-sm-12 control-label">Contraseña</label>

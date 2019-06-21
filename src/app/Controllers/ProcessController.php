@@ -57,6 +57,9 @@ class ProcessController extends Controller {
     $array['page'] = \Solunes\Master\App\Page::find(1);
     $array['item'] = \Solunes\Reservation\App\Accommodation::find($accommodation_id);
     $array['reservation'] = \Solunes\Reservation\App\Reservation::find($reservation_id);
+    if($array['reservation']->status!='holding'&&$array['reservation']->status!='pre-reserve'){
+      return redirect('reservations/item/'.$accommodation_id)->with('message_success', 'Su reserva ya fue marcada como preventa, por lo tanto debe iniciar una nueva reserva.');
+    }
     return view('reservation::process.schedule-list', $array);
   }
 
@@ -64,6 +67,9 @@ class ProcessController extends Controller {
     $array['page'] = \Solunes\Master\App\Page::find(1);
     $array['item'] = \Solunes\Reservation\App\Accommodation::find($accommodation_id);
     $array['reservation'] = \Solunes\Reservation\App\Reservation::find($reservation_id);
+    if($array['reservation']->status!='holding'&&$array['reservation']->status!='pre-reserve'){
+      return redirect('reservations/item/'.$accommodation_id)->with('message_success', 'Su reserva ya fue marcada como preventa, por lo tanto debe iniciar una nueva reserva.');
+    }
     return view('reservation::process.schedule-block', $array);
   }
 
