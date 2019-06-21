@@ -38,7 +38,7 @@ class ReservationServiceProvider extends ServiceProvider {
 
         /* Comandos de Consola */
         $this->commands([
-            //\Solunes\Reservation\App\Console\AccountCheck::class,
+            \Solunes\Reservation\App\Console\FixReservationsStatus::class,
         ]);
 
         $this->mergeConfigFrom(

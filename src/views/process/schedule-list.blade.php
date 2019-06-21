@@ -44,6 +44,11 @@
                 <td>
                   @if($free)
                   <a href="{{ url('reservations/pick-schedule-reservation/'.$item->id.'/'.$reservation->id.'/'.$subdate.'/'.$subdate.'/'.$subitem['time_in'].'/'.$subitem['time_out']) }}" class="btn">Reservar</a>
+                  @elseif(auth()->check()&&$reservation->user_id==auth()->user()->id)
+                  <button class="btn btn-primary btn-sm text-white" disabled="true">RESERVADO</button>
+                  @if(in_array($reservation->status, ['pre-reserve','sale']))
+                    <a href="{{ url('reservations/cancel-reservation/'.$reservation->id) }}" onclick="return confirm('¿Confirma que desea cancelar su reserva?')"><button class="btn btn-primary btn-sm text-white"><i class="fa fa-close"></i></button></a>
+                  @endif
                   @else
                   <button class="btn btn-primary btn-sm text-white" disabled="true">NO DISPONIBLE</button>
                   @endif

@@ -65,37 +65,37 @@
 						<div class="border-box">
 							
 							<p>Si ya tiene una cuenta de usuario, inicie sesión con su usuario y contraseña. Si no recuerda su
-								contraseña, puede <a href="{{ url('account/recover-password/1596858') }}">recuperarla aquí</a>.</p>
+							contraseña, puede <a href="{{ url('account/recover-password/1596858') }}">recuperarla aquí</a>.</p>
 
-								<form class="form-horizontal" method="post" action="{{ url('auth/login') }}">
-									<div class="form-group">
-										<label for="inputEmail3" class="col-sm-12 control-label">Email o Celular</label>									
-										<input name="user" type="email" class="form-control" id="inputEmail3" placeholder="Email o Celular de Registro">									
-									</div>
-									
-									<div class="form-group">
-										<label for="inputPassword3" class="col-sm-12 control-label">Contraseña</label>
-										<input name="password" type="password" class="form-control" id="inputPassword3" placeholder="Contraseña">
-									</div>
+							<form class="form-horizontal" method="post" action="{{ url('auth/login') }}">
+								<div class="form-group">
+									<label for="inputEmail3" class="col-sm-12 control-label">Email o Celular</label>									
+									<input name="user" type="email" class="form-control" id="inputEmail3" placeholder="Email o Celular de Registro">									
+								</div>
+								
+								<div class="form-group">
+									<label for="inputPassword3" class="col-sm-12 control-label">Contraseña</label>
+									<input name="password" type="password" class="form-control" id="inputPassword3" placeholder="Contraseña">
+								</div>
 
-									<div class="form-group">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox"> Recuérdame
-											</label>
-										</div>
+								<div class="form-group">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox"> Recuérdame
+										</label>
 									</div>
+								</div>
 
-									<div class="form-group">
-										<button type="submit" class="btn">Iniciar Sesión</button>
-									</div>
-								</form>
+								<div class="form-group">
+									<button type="submit" class="btn">Iniciar Sesión</button>
+								</div>
+							</form>
 							
 						</div>
-						@else
-						@endif
 					</div>
-
+					@else
+					@endif
+					
 					<div class="col-md-12">
 						<h3 class="title-section">Confirmar Datos</h3>
 					</div>
@@ -155,6 +155,12 @@
 									  </div>
 								  </div>
 								  @endif
+								  <div class="form-group">
+									  <label for="inputPassword3" class="col-sm-12 control-label">Método de Pago</label>
+									  <div class="col-sm-12">
+      									{!! Form::select('payment_method_id', $payment_options, NULL, ['id'=>'payment_id','class'=>'form-control']) !!}
+									  </div>
+								  </div> 
 								  <div class="form-group">
 									  <div class="col-sm-12">
 										  <input type="hidden" name="accommodation_id" value="{{ $item->id }}" />

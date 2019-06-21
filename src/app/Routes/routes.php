@@ -19,6 +19,7 @@ Route::group(['prefix'=>'reservations'], function(){
     Route::get('schedule-list/{accommodation_id}/{reservation_id}', 'ProcessController@getScheduleList');
     Route::get('schedule-group/{accommodation_id}/{reservation_id}', 'ProcessController@getScheduleBlock');
     Route::get('pick-schedule-reservation/{accommodation_id}/{reservation_id}/{initial_date}/{end_date}/{initial_time}/{end_time}', 'ProcessController@getPickScheduleReservation');
+    Route::get('cancel-reservation/{reservation_id}', 'ProcessController@getCancelReservation');
     Route::get('finish-reservation/{accommodation_id}/{reservation_id}', 'ProcessController@getFinishReservation');
     Route::post('finish-reservation', 'ProcessController@postFinishReservation');
 });

@@ -76,12 +76,38 @@ class ProcessController extends Controller {
       $reservation->end_date = $end_date;
       $reservation->initial_time = $initial_time;
       $reservation->end_time = $end_time;
+      $datetime = date("Y-m-d H:i:s", strtotime(config('reservation.prereserve_deadline')));
+      $reservation->reservation_deadline = $datetime;
       $reservation->status = 'pre-reserve';
+      if($reservation->sale){
+        $sale = $reservation->sale;
+        $sale->status = 'cancelled';
+        $sale->save();
+        $reservation->sale_id = NULL;
+      }
       $reservation->save();
       // Marcar como preseleccionado para que otro no pueda comprar basandose en cupo y dar plazo para finalizar la reserva.
       return redirect('reservations/finish-reservation/'.$accommodation->id.'/'.$reservation->id)->with('message_success', 'Su proceso de reserva fue realizado correctamente, ahora puede registrar sus datos y finalizarla.');
     } else {
       return redirect($this->prev)->with('message_error', 'Hubo un error al seleccionar su reserva.');
+    }
+  }
+
+  // Cancelar mi reserva pendiente
+  public function getCancelReservation($reservation_id) {
+    $reservation = \Solunes\Reservation\App\Reservation::find($reservation_id);
+    if(auth()->check()&&$reservation&&in_array($reservation->status, ['pre-reserve','sale'])&&$reservation->user_id==auth()->user()->id){
+      $reservation->status = 'cancelled';
+      if($reservation->sale){
+        $sale = $reservation->sale;
+        $sale->status = 'cancelled';
+        $sale->save();
+        $reservation->sale_id = NULL;
+      }
+      $reservation->save();
+      return redirect($this->prev)->with('message_success', 'Su reserva fue cancelada correctamente.');
+    } else {
+      return redirect($this->prev)->with('message_error', 'No tiene todas las condiciones para cancelar su reserva.');
     }
   }
 
@@ -98,6 +124,7 @@ class ProcessController extends Controller {
     }
     $array['user'] = $user;
     $array['customer'] = $customer;
+    $array['payment_options'] = \Solunes\Payments\App\PaymentMethod::active()->order()->lists('name','id');
     return view('reservation::process.finish-reservation', $array);
   }
 
@@ -145,6 +172,8 @@ class ProcessController extends Controller {
       }
       $reservation->amount = $reservation->price * $reservation->counts;
       $reservation->status = 'sale';
+      $datetime = date("Y-m-d H:i:s", strtotime(config('reservation.sale_deadline')));
+      $reservation->reservation_deadline = $datetime;
       $reservation->save();
 
       $sale_details = [];
@@ -194,7 +223,9 @@ class ProcessController extends Controller {
       }
       $reservation->load('reservation_users');
 
-      $sale = \Sales::generateSale($reservation->user_id, $reservation->customer_id, $reservation->currency_id, 2, $reservation->invoice, $reservation->invoice_name, $reservation->invoice_number, $sale_details);
+      $sale = \Sales::generateSale($reservation->user_id, $reservation->customer_id, $reservation->currency_id, $request->input('payment_method_id'), $reservation->invoice, $reservation->invoice_name, $reservation->invoice_number, $sale_details);
+      $reservation->sale_id = $sale->id;
+      $reservation->save();
 
       // Send Email
       $vars = ['@name@'=>$user->name, '@total_cost@'=>$sale->total_cost, '@sale_link@'=>url('process/sale/'.$sale->id)];
