@@ -62,5 +62,6 @@ return [
     'summary' => 'Resumen',
     'user' => 'Usuario',
     'users_count' => 'Contador de Usuarios',
+    'reservation_file' => 'Reserva en PDF',
 
 ];

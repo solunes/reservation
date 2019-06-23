@@ -10,6 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::get('test/preview-reservation', 'TestController@getPreivewReservation');
 
 Route::get('reservations', 'ProcessController@getPackages');
 Route::group(['prefix'=>'reservations'], function(){

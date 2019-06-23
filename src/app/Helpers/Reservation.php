@@ -217,16 +217,15 @@ class Reservation {
         return $date_durations;
     }
 
-    public static function checkOccupancyDays($service, $quantity, $date_in, $date_out) {
-        if('asd'=='sd'){
-            
-        }
+    public static function generateReservationPdf($reservation) {
+      $array['item'] = $reservation;
+      $pdf = \PDF::loadView('reservation::pdf.reservation-file', $array);
+      $pdf = \Asset::apply_pdf_template($pdf, 'RESERVA REALIZADA Y CONFIRMADA');
+      $reservation->reservation_file = \Asset::upload_pdf_template($pdf, 'reservation', 'reservation_file');
+      $reservation->save();
+      return $reservation;
     }
     
-    public static function checkOccupancyHours($service, $quantity, $date, $time_in, $time_out) {
-
-    }
-
     public static function process_reservation() {
         if($cart = \Solunes\Reservation\App\Cart::checkOwner()->checkCart()->status('holding')->with('cart_items','cart_items.product')->first()){
           $cart->touch();

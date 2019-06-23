@@ -23,6 +23,7 @@ class NodesReservation extends Migration
             $table->integer('currency_id')->nullable()->default(1);
             $table->integer('price')->nullable()->default(1);
             $table->integer('capacity')->nullable()->default(1);
+            $table->integer('ticket')->nullable()->default(0);
             $table->integer('duration_number')->nullable();
             $table->enum('duration_type', ['minute','hour','day'])->default('minute');
             $table->string('image')->nullable();
@@ -100,6 +101,8 @@ class NodesReservation extends Migration
             $table->integer('invoice_number')->nullable();
             $table->string('invoice_name')->nullable();
             $table->enum('status', ['holding','pre-reserve','sale','paid','finished','cancelled'])->default('holding');
+            $table->string('reservation_file')->nullable();
+            $table->string('tickets_file')->nullable();
             $table->timestamps();
             $table->foreign('accommodation_id')->references('id')->on('accommodations')->onDelete('cascade');
         });
