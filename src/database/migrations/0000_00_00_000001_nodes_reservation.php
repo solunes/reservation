@@ -22,7 +22,7 @@ class NodesReservation extends Migration
             $table->enum('pricing_type', ['per-person','total-amount'])->default('per-person');
             $table->integer('currency_id')->nullable()->default(1);
             $table->integer('price')->nullable()->default(1);
-            $table->integer('capicity')->nullable()->default(1);
+            $table->integer('capacity')->nullable()->default(1);
             $table->integer('duration_number')->nullable();
             $table->enum('duration_type', ['minute','hour','day'])->default('minute');
             $table->string('image')->nullable();

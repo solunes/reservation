@@ -24,7 +24,7 @@ class Reservation {
           $subarray = [];
           $minutes_interval = \Reservation::getMinutePeriods($service);
           foreach($items as $item){
-            $subarray = \Reservation::getSeparateTimePeriods($subarray, $item->initial_day, NULL, $item->initial_time, strtotime($item->end_time), $minutes_interval);
+            $subarray = \Reservation::getSeparateTimePeriods($subarray, $item->initial_day, $date_start, $item->initial_time, strtotime($item->end_time), $minutes_interval);
           }
           \Log::info('checking: '.$date_end);
           if($date_start==$date_end){
@@ -47,20 +47,25 @@ class Reservation {
           }
         } else if($service->type=='closed'){
           $items = $service->accommodation_spaces()->where('initial_date', '>=', $date_start)->where('end_date', '<=', $date_end)->get();
+          if(count($items)==0){
+            $items = $service->accommodation_spaces()->where('initial_date', '>=', date('Y-m-d'))->where('initial_time', '>=', date('H:i:s'))->get();
+          }
           foreach($items as $item){
-            $array[$item->initial_date][] = ['time_in'=>$item->initial_time,'date_out'=>$item->end_time,'time_out'=>$item->end_time];
+            $days_duration = strtotime($item->end_date.' '.$item->end_time) - strtotime($item->initial_date.' '.$item->initial_time);
+            $days_duration = round($days_duration / (60 * 60 * 24));
+            $array[$item->initial_date][] = ['time_in'=>$item->initial_time,'days_duration'=>$days_duration,'time_out'=>$item->end_time];
           }
         }
         return $array;
     }
 
-    public static function getAvailableDays($service, $date_start, $date_end) {
+    public static function getAvailableDays($service, $date_start, $date_end, $reservation = NULL) {
         $array = [];
         if($service->type=='open'){
           $items = $service->accommodation_ranges;
           $subarray = [];
           foreach($items as $item){
-            $subarray = \Reservation::getSeparateTimePeriods($subarray, $item->initial_day, NULL, $item->initial_time, strtotime($item->end_time), $minutes_interval);
+            $subarray = \Reservation::getSeparateTimePeriods($subarray, $item->initial_day, $date_start, $item->initial_time, strtotime($item->end_time), $minutes_interval);
           }
           if($date_start==$date_end){
             $period = [$date_start];
@@ -99,14 +104,20 @@ class Reservation {
       return $duration;
     }
 
-    public static function getSeparateTimePeriods($subarray, $initial_day, $date_out, $initial_time, $end_timestamp, $minutes_interval) {
-      $initial_timestamp = strtotime(date('Y-m-d').' '.$initial_time);
+    public static function getSeparateTimePeriods($subarray, $initial_day, $initial_date, $initial_time, $end_timestamp, $minutes_interval) {
+      if(!$initial_date){
+        $initial_date = date('Y-m-d');
+      }
+      $initial_timestamp = strtotime($initial_date.' '.$initial_time);
       $new_end_time_timestamp = strtotime('+'.$minutes_interval.' minutes', $initial_timestamp);
       $next_end_time_timestamp = strtotime('+'.$minutes_interval.' minutes', $new_end_time_timestamp);
+      $real_end_date = date('Y-m-d', $new_end_time_timestamp);
       $real_end_time = date('H:i:s', $new_end_time_timestamp);
-      $subarray[$initial_day][] = ['time_in'=>$initial_time,'date_out'=>$date_out,'time_out'=>$real_end_time];
+      $days_duration = $new_end_time_timestamp - $initial_timestamp;
+      $days_duration = round($days_duration / (60 * 60 * 24));
+      $subarray[$initial_day][] = ['time_in'=>$initial_time,'days_duration'=>$days_duration,'time_out'=>$real_end_time];
       if($next_end_time_timestamp<=$end_timestamp){
-        $subarray = \Reservation::getSeparateTimePeriods($subarray, $initial_day, $date_out, $real_end_time, $end_timestamp, $minutes_interval);
+        $subarray = \Reservation::getSeparateTimePeriods($subarray, $initial_day, $initial_date, $real_end_time, $end_timestamp, $minutes_interval);
       }
       return $subarray;
     }
@@ -139,7 +150,7 @@ class Reservation {
         } else if($service->type=='closed'){
           $items = $service->accommodation_spaces()->where('initial_date', '>=', $date_start)->where('end_date', '<=', $date_end)->get();
           foreach($items as $item){
-            $array[$item->initial_date][] = ['time_in'=>$item->initial_time,'date_out'=>$item->end_time,'time_out'=>$item->end_time];
+            $array[$item->initial_date][] = ['time_in'=>$item->initial_time,'date_out'=>NULL,'time_out'=>$item->end_time];
           }
         }
         return $array;
@@ -148,66 +159,62 @@ class Reservation {
     public static function getTakenItems($service, $date_start, $date_end) {
         $array = [];
         $items = $service->active_reservations()->where('initial_date', '>=', $date_start)->where('end_date', '<=', $date_end)->orderBy('initial_date','ASC')->orderBy('initial_time','ASC')->get();
+        if(count($items)==0){
+          $items = $service->active_reservations()->where('initial_date', '>=', date('Y-m-d'))->where('initial_time', '>=', date('H:i:s'))->get();
+        }
         foreach($items as $item){
-            $array[$item->initial_date][] = ['time_in'=>$item->initial_time,'date_out'=>$item->end_date,'time_out'=>$item->end_time];
+          if(!isset($array[$item->initial_date][$item->initial_time])){
+            $array[$item->initial_date][$item->initial_time] = ['time_in'=>$item->initial_time,'date_out'=>$item->end_date,'time_out'=>$item->end_time,'user_id'=>$item->user_id,'status'=>$item->status,'reservation_id'=>$item->id,'count'=>$item->counts];
+          } else {
+            $array[$item->initial_date][$item->initial_time]['count'] = $array[$item->initial_date][$item->initial_time]['count']+$item->counts;
+          }
         }
         return $array;
     }
 
-    public static function getOccupancyHours($service, $date_start, $date_end) {
+    public static function getOccupancyHours($service, $date_start, $date_end, $reservation = NULL) {
         $available_dates = \Reservation::getAvailableHours($service, $date_start, $date_end);
         $taken_dates = \Reservation::getTakenItems($service, $date_start, $date_end);
         $date_durations = [];
         foreach($available_dates as $available_date => $available_times){
           if(isset($taken_dates[$available_date])){
             $taken_date = $taken_dates[$available_date];
-            /*if(count($taken_date)==0){
-              foreach($available_times as $available_time){
-                $date_durations[$available_date][] = Reservation::getTimeDifference($available_time['time_in'], $available_time['time_out']);
-              }
-            } else {
-              foreach($available_times as $available_time){
-                $last_time = NULL;
-                foreach($taken_date as $key => $taken_time){
-                  if(!$last_time&&$taken_time['time_in']!=$available_time['time_in']){
-                    $intial_time = $available_time['time_in'];
-                    $date_durations[$available_date][] = Reservation::getTimeDifference($available_time['time_in'], $taken_time['time_in']);
-                    if($taken_time['time_out']!=$available_time['time_out']){
-                      $date_durations[$available_date][] = Reservation::getTimeDifference($taken_time['time_out'], $available_time['time_out']);
-                    }
-                  } else if($last_time&&$taken_time['time_in']!=$available_time['time_in']) {
-                    $intial_time = $available_time['time_in'];
-                    $date_durations[$available_date][] = Reservation::getTimeDifference($available_time['time_in'], $taken_time['time_in']);
-                    if($taken_time['time_out']!=$available_time['time_out']){
-                      $date_durations[$available_date][] = Reservation::getTimeDifference($taken_time['time_out'], $available_time['time_out']);
-                    }
-                  }
-                  $last_time = $taken_time['time_out'];
-                  unset($taken_date[$key]);
-                }
-              }
-            }*/
             $occupied_times = [];
+            $occupied_times_detail = [];
             foreach($taken_date as $taken_subdate){
               $occupied_times[] = $taken_subdate['time_in'];
+              $occupied_times_detail[$taken_subdate['time_in']] = $taken_subdate;
             }
             foreach($available_times as $key => $available_time){
-              if(in_array($available_time['time_in'], $occupied_times)){
-                $date_durations[$available_date][] = array_merge($available_time, ['status'=>'taken']);
+              if($available_time['days_duration']>0){
+                $new_end_date = date('Y-m-d', strtotime($available_date.' + '.$available_time['days_duration'].' days'));
               } else {
-                $date_durations[$available_date][] = array_merge($available_time, ['status'=>'free']);
+                $new_end_date = $available_date;
+              }
+              if(in_array($available_time['time_in'], $occupied_times)){
+                if(auth()->check()&&$occupied_times_detail[$available_time['time_in']]['user_id']==auth()->user()->id){
+                  $date_durations[$available_date][] = array_merge($available_time, ['status'=>$occupied_times_detail[$available_time['time_in']]['status'],'date_out'=>$new_end_date,'user_id'=>$occupied_times_detail[$available_time['time_in']]['user_id'],'reservation_id'=>$occupied_times_detail[$available_time['time_in']]['reservation_id'],'count'=>$occupied_times_detail[$available_time['time_in']]['count']]);
+                } else if(($occupied_times_detail[$available_time['time_in']]['count']+$reservation->counts)>$service->capacity) {
+                  $date_durations[$available_date][] = array_merge($available_time, ['status'=>'unavailable','date_out'=>$new_end_date,'user_id'=>NULL,'reservation_id'=>NULL,'count'=>$occupied_times_detail[$available_time['time_in']]['count']]);
+                } else {
+                  $date_durations[$available_date][] = array_merge($available_time, ['status'=>'free','date_out'=>$new_end_date,'user_id'=>NULL,'reservation_id'=>NULL,'count'=>$occupied_times_detail[$available_time['time_in']]['count']]);
+                }
+              } else {
+                $date_durations[$available_date][] = array_merge($available_time, ['status'=>'free','date_out'=>$new_end_date,'user_id'=>NULL,'reservation_id'=>NULL,'count'=>0]);
               }
             }
           } else {
-            $date_durations[$available_date] = $available_times;
+            foreach($available_times as $key => $available_time){
+              if($available_time['days_duration']>0){
+                $new_end_date = date('Y-m-d', strtotime($available_date.' + '.$available_time['days_duration'].' days'));
+              } else {
+                $new_end_date = $available_date;
+              }
+              $date_durations[$available_date][] = array_merge($available_time, ['status'=>'free','date_out'=>$new_end_date,'user_id'=>NULL,'reservation_id'=>NULL,'count'=>0]);
+            }
           }
         }
         return $date_durations;
-        /*foreach($date_durations as $date => $time_durations){
-          foreach($time_durations as $time_duration){
-              echo 'Fecha: '.$date.' ('.$time_duration.' minutos)<br>';
-          }
-        }*/
     }
 
     public static function checkOccupancyDays($service, $quantity, $date_in, $date_out) {

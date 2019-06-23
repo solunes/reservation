@@ -57,7 +57,7 @@ class ProcessController extends Controller {
     $array['page'] = \Solunes\Master\App\Page::find(1);
     $array['item'] = \Solunes\Reservation\App\Accommodation::find($accommodation_id);
     $array['reservation'] = \Solunes\Reservation\App\Reservation::find($reservation_id);
-    if($array['reservation']->status!='holding'&&$array['reservation']->status!='pre-reserve'){
+    if(!$array['reservation']||($array['reservation']->status!='holding'&&$array['reservation']->status!='pre-reserve')){
       return redirect('reservations/item/'.$accommodation_id)->with('message_success', 'Su reserva ya fue marcada como preventa, por lo tanto debe iniciar una nueva reserva.');
     }
     return view('reservation::process.schedule-list', $array);
@@ -77,7 +77,20 @@ class ProcessController extends Controller {
   public function getPickScheduleReservation($accommodation_id, $reservation_id, $initial_date, $end_date, $initial_time, $end_time) {
     $accommodation = \Solunes\Reservation\App\Accommodation::find($accommodation_id);
     $reservation = \Solunes\Reservation\App\Reservation::find($reservation_id);
-    if($accommodation&&$reservation){
+    if($accommodation&&$reservation&&in_array($reservation->status,['holding','pre-reserve','sale'])){
+      if($reservation->user_id&&$reservation->customer_id){
+        if(!auth()->check()){
+          return redirect($this->prev)->with('message_error', 'Debe tener una cuenta para tomar esta reserva, inicie nuevamente.');
+        } else if(auth()->user()->id!=$reservation->user_id){
+          return redirect($this->prev)->with('message_error', 'Su usuario no es igual al de la reserva seleccionada.');
+        }
+      } else {
+        if(auth()->check()){
+          $user = auth()->user();
+          $reservation->user_id = $user->id;
+          $reservation->customer_id = $user->customer->id;
+        }
+      }
       $reservation->initial_date = $initial_date;
       $reservation->end_date = $end_date;
       $reservation->initial_time = $initial_time;
@@ -121,6 +134,17 @@ class ProcessController extends Controller {
     $array['page'] = \Solunes\Master\App\Page::find(1);
     $array['item'] = \Solunes\Reservation\App\Accommodation::find($accommodation_id);
     $array['reservation'] = \Solunes\Reservation\App\Reservation::find($reservation_id);
+    if($array['item']&&$array['reservation']&&in_array($array['reservation']->status,['holding','pre-reserve','sale'])){
+      if($array['reservation']->user_id&&$array['reservation']->customer_id){
+        if(!auth()->check()){
+          return redirect($this->prev)->with('message_error', 'Debe tener una cuenta para tomar esta reserva, inicie nuevamente.');
+        } else if(auth()->user()->id!=$array['reservation']->user_id){
+          return redirect($this->prev)->with('message_error', 'Su usuario no es igual al de la reserva seleccionada.');
+        }
+      }
+    } else {
+      return redirect($this->prev)->with('message_error', 'Hubo un error para realizar esta reserva.');
+    }
     if(auth()->check()){
       $user = auth()->user();
       $customer = $user->customer;
@@ -138,6 +162,17 @@ class ProcessController extends Controller {
   public function postFinishReservation(Request $request) {
     $accommodation = \Solunes\Reservation\App\Accommodation::find($request->input('accommodation_id'));
     $reservation = \Solunes\Reservation\App\Reservation::find($request->input('reservation_id'));
+    if($accommodation&&$reservation&&in_array($reservation->status,['holding','pre-reserve','sale'])){
+      if($reservation->user_id&&$reservation->customer_id){
+        if(!auth()->check()){
+          return redirect($this->prev)->with('message_error', 'Debe tener una cuenta para tomar esta reserva, inicie nuevamente.');
+        } else if(auth()->user()->id!=$reservation->user_id){
+          return redirect($this->prev)->with('message_error', 'Su usuario no es igual al de la reserva seleccionada.');
+        }
+      }
+    } else {
+      return redirect($this->prev)->with('message_error', 'Hubo un error para realizar esta reserva.');
+    }
     if(auth()->check()){
       $rules = \Solunes\Reservation\App\Reservation::$rules_auth_send;
     } else {
@@ -199,7 +234,12 @@ class ProcessController extends Controller {
         $reservation_user->cellphone = $request->input('cellphone');
       }
       $reservation_user->save();
-      $sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>1, 'amount'=>$reservation->price, 'detail'=>$reservation->name];
+      $detail = $reservation->name.' ('.$reservation->initial_date.' '.$reservation->initial_time.' - ';
+      if($reservation->initial_date!=$reservation->end_date){
+        $detail .= $reservation->end_date.' ';
+      }
+      $detail .= $reservation->end_time.')';
+      $sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>$reservation->counts, 'amount'=>$reservation->price, 'detail'=>$detail];
 
       if($request->input('counts')>1){
         foreach(range(2, $request->input('counts')) as $subcount){
@@ -224,7 +264,7 @@ class ProcessController extends Controller {
             $reservation_user->age = $request->input('age');
           }
           $reservation_user->save();
-          $sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>1, 'amount'=>$reservation->price, 'detail'=>$reservation->name];
+          $sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>1, 'amount'=>$reservation->price, 'detail'=>$reservation->name.' - '.$reservation->initial_date.' '.$reservation->initial_time.' a '.$reservation->end_date.' '.$reservation->end_time];
         }
       }
       $reservation->load('reservation_users');

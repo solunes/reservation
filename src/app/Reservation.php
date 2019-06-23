@@ -77,6 +77,10 @@ class Reservation extends Model {
         return $this->belongsTo('Solunes\Business\App\Currency');
     }
 
+    public function sale() {
+        return $this->belongsTo('Solunes\Sales\App\Sale');
+    }
+
     public function reservation_users() {
         return $this->hasMany('Solunes\Reservation\App\ReservationUser','parent_id');
     }

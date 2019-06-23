@@ -50,7 +50,7 @@ return [
     'duration_number' => 'Duración',
     'duration_type' => 'Tipo de Duración',
     'amount' => 'Monto',
-    'capicity' => 'Capacidad',
+    'capacity' => 'Capacidad',
     'content' => 'Contenido',
     'counts' => 'Contador',
     'currency' => 'Moneda',

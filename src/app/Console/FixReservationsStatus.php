@@ -33,12 +33,13 @@ class FixReservationsStatus extends Command
         if(count($items)>0){
             foreach($items as $item){
                 $item->status = 'cancelled';
-                $item->save();
-                if($item->sale_id){
+                if($item->sale){
                     $sale = $item->sale;
                     $sale->status = 'cancelled';
                     $sale->save();
-               }
+                    $item->sale_id = NULL;
+                }
+                $item->save();
                 $this->info('Reserva correctamente anulada y revertida: #'.$item->id);
                 $count++;
             }

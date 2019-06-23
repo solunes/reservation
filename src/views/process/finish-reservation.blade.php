@@ -22,17 +22,23 @@
 						<div class="row border-box">
 							<div class="col-md-9">
 								<h5>Detalle</h5>
-								<p>{{ $item->name }} / {{ $reservation->initial_date.' - '.$reservation->initial_time.' a '.$reservation->end_time }}  <strong class="product-quantity">(x{{ $reservation->counts }})</strong></p>
+								<p>{{ $item->name }} / 
+									{{ $reservation->initial_date.' - '.$reservation->initial_time.' a ' }}
+									@if($reservation->initial_date!=$reservation->end_date)
+										{{ $reservation->end_date }} 
+									@endif
+									{{ $reservation->end_time }} 
+									<strong class="product-quantity">(x{{ $reservation->counts }})</strong></p>
 							</div>
 							<div class="col-md-3">
 								<h5>Total</h5>
-								<p><strong>Bs. {{ $reservation->price }}</strong></p>
+								<p><strong>Bs. {{ $reservation->price*$reservation->counts }}</strong></p>
 							</div>
 							<div class="col-md-9">
 								<h5>Precio total</h5>
 							</div>
 							<div class="col-md-3">
-								<p><strong>Bs. {{ $reservation->price }}</strong></p>
+								<p><strong>Bs. {{ $reservation->price*$reservation->counts }}</strong></p>
 							</div>				
 						</div>							
 					</div>
@@ -161,12 +167,6 @@
 									  </div>
 								  </div>
 								  @endif
-								  <div class="form-group">
-									  <label for="inputPassword3" class="col-sm-12 control-label">Método de Pago</label>
-									  <div class="col-sm-12">
-      									{!! Form::select('payment_method_id', $payment_options, NULL, ['id'=>'payment_id','class'=>'form-control']) !!}
-									  </div>
-								  </div> 
 								  <div class="form-group">
 									  <div class="col-sm-12">
 										  <input type="hidden" name="accommodation_id" value="{{ $item->id }}" />

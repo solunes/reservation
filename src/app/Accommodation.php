@@ -73,15 +73,19 @@ class Accommodation extends Model {
     	}
     }
 
-    public function getItemsAttribute() {
+    public function getRealCapacityAttribute() {
+        return '10';
+    }
+
+    public function getItemsAttr($reservation) {
     	$date_start = date('Y-m-d');
 		$date_end = strtotime($date_start);
-		$date_end = strtotime("+7 days", $date_end);
+		$date_end = strtotime("+14 days", $date_end);
         $date_end = date('Y-m-d', $date_end);
     	if($this->type=='day'){
-        	return \Reservation::getAvailableDays($this, $date_start, $date_end); // Mezclar con occupancy
+        	return \Reservation::getAvailableDays($this, $date_start, $date_end, $reservation); // Mezclar con occupancy
     	} else {
-        	return \Reservation::getOccupancyHours($this, $date_start, $date_end);
+        	return \Reservation::getOccupancyHours($this, $date_start, $date_end, $reservation);
     	}
     }
 
