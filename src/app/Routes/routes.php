@@ -14,6 +14,8 @@ Route::get('test/preview-reservation', 'TestController@getPreivewReservation');
 
 Route::get('reservations', 'ProcessController@getPackages');
 Route::group(['prefix'=>'reservations'], function(){
+    Route::get('my-reservations/{token}', 'ProcessController@getMyReservations');
+    Route::get('reservation/{reservation_id}', 'ProcessController@getReservation');
     Route::get('list/{token}', 'ProcessController@getPackages');
     Route::get('item/{token}', 'ProcessController@getPackage');
     Route::post('start-reservation', 'ProcessController@postStartReservation');

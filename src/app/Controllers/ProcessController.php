@@ -22,6 +22,20 @@ class ProcessController extends Controller {
 	  $this->prev = $url->previous();
 	}
 
+  // Mostrar Mis Reservas
+  public function getMyReservations($token = 'asdasdasd') {
+    $array['page'] = \Solunes\Master\App\Page::find(1);
+    $array['items'] = \Solunes\Reservation\App\Accommodation::get();
+    return view('reservation::list.my-reservations', $array);
+  }
+
+  // Mostrar Mis Reservas
+  public function getReservation($id) {
+    $array['page'] = \Solunes\Master\App\Page::find(1);
+    $array['items'] = \Solunes\Reservation\App\Accommodation::get();
+    return view('reservation::list.reservation', $array);
+  }
+
   // Mostrar Paquetes
   public function getPackages($token = 'asdasdasd') {
     $array['page'] = \Solunes\Master\App\Page::find(1);

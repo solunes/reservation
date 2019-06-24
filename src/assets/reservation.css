@@ -1,60 +1,72 @@
-.solunes-reservation {
-  /*=================================
-      COLORES
-  =================================*/
-  /*=================================
-      BOTONES
-  =================================*/
-  /*=================================
-      BACKGROUND
-  =================================*/ }
-  .solunes-reservation .box-primary {
-    box-shadow: 2px 2px 60px -16px rgba(0, 0, 0, 0.33);
-    margin-top: 10%;
-    padding: 40px 20px; }
-  .solunes-reservation .box {
-    border: 1px solid #e8e8e8;
-    border-radius: 5px; }
-  .solunes-reservation .select:hover {
-    text-decoration: none; }
-  .solunes-reservation .select:hover div {
-    background-color: #3384be;
-    border-radius: 0.25rem !important;
-    transition: 0.6s; }
-  .solunes-reservation .table {
-    margin: 16px; }
-  .solunes-reservation .col-xs-5, .solunes-reservation .col-sm-5, .solunes-reservation .col-md-5, .solunes-reservation .col-lg-5 {
-    min-height: 1px;
-    position: relative; }
-  .solunes-reservation .col-xs-5 {
+.solunes-reservation .title-page {
+  margin-bottom: 2rem; }
+.solunes-reservation .title-section {
+  margin-bottom: 0px;
+  font-size: 18px; }
+.solunes-reservation .title-information {
+  font-size: 14px;
+  margin-bottom: 0; }
+.solunes-reservation .center {
+  text-align: center; }
+.solunes-reservation .box-primary {
+  box-shadow: 2px 2px 60px -16px rgba(0, 0, 0, 0.33);
+  margin-top: 10%;
+  padding: 40px 20px; }
+.solunes-reservation .detail {
+  margin: 30px;
+  padding: 10px;
+  border: 1px solid gainsboro;
+  line-height: 18px;
+  border-radius: 12px; }
+  .solunes-reservation .detail strong {
+    color: #080b2c; }
+.solunes-reservation .box {
+  border: 1px solid #e8e8e8;
+  border-radius: 5px; }
+.solunes-reservation .select:hover {
+  text-decoration: none; }
+.solunes-reservation .select:hover div {
+  background-color: #3384be;
+  border-radius: 0.25rem !important;
+  transition: 0.6s; }
+.solunes-reservation .table {
+  max-width: 95%;
+  margin: auto; }
+.solunes-reservation .col-xs-5, .solunes-reservation .col-sm-5, .solunes-reservation .col-md-5, .solunes-reservation .col-lg-5 {
+  min-height: 1px;
+  position: relative; }
+.solunes-reservation .col-xs-5 {
+  float: left;
+  padding: 5px;
+  width: 20%; }
+.solunes-reservation .text-primary {
+  color: #102254 !important; }
+.solunes-reservation .btn-primary {
+  color: #fff;
+  background-color: #102254;
+  border-color: #102254; }
+.solunes-reservation .bg-primary {
+  background-color: #102254 !important; }
+.solunes-reservation .card-header {
+  background: #080b2c; }
+.solunes-reservation .item-reservation {
+  border-bottom: 1px solid gainsboro;
+  padding: 10px;
+  line-height: 20px; }
+
+@media (min-width: 768px) {
+  .col-xs-5 {
     float: left;
-    padding: 5px;
     width: 20%; }
-  .solunes-reservation .text-primary {
-    color: #102254 !important; }
-  .solunes-reservation .btn-primary {
-    color: #fff;
-    background-color: #102254;
-    border-color: #102254; }
-  .solunes-reservation .bg-primary {
-    background-color: #102254 !important; }
 
-  .card-header {
-    background: #080b2c;
-  }
-
-  @media (min-width: 768px) {
-    .solunes-reservation .col-xs-5 {
-      float: left;
-      width: 20%; }
-    .solunes-reservation .col-sm-5 {
-      float: left;
-      width: 20%; } }
-  @media (min-width: 992px) {
-    .solunes-reservation .col-md-5 {
-      float: left;
-      width: 20%; } }
-  @media (min-width: 1200px) {
-    .solunes-reservation .col-lg-5 {
-      float: left;
-      width: 20%; } }
+  .col-sm-5 {
+    float: left;
+    width: 20%; } }
+@media (min-width: 992px) {
+  .col-md-5 {
+    float: left;
+    width: 20%; } }
+@media (min-width: 1200px) {
+  .col-lg-5 {
+    float: left;
+    width: 20%; } }
