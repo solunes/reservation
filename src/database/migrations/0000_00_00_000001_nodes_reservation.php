@@ -125,6 +125,7 @@ class NodesReservation extends Migration
             if(config('reservation.reservation_subuser_age')){
                 $table->integer('age')->nullable();
             }
+            $table->enum('status', ['holding','paid','used','cancelled'])->default('holding');
             $table->timestamps();
             $table->foreign('parent_id')->references('id')->on('reservations')->onDelete('cascade');
         });

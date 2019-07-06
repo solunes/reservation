@@ -220,12 +220,28 @@ class Reservation {
     public static function generateReservationPdf($reservation) {
       $array['item'] = $reservation;
       $pdf = \PDF::loadView('reservation::pdf.reservation-file', $array);
-      $pdf = \Asset::apply_pdf_template($pdf, 'RESERVA REALIZADA Y CONFIRMADA');
+      $pdf = \Asset::apply_pdf_template($pdf, 'SOLICITUD DE RESERVA');
       $reservation->reservation_file = \Asset::upload_pdf_template($pdf, 'reservation', 'reservation_file');
-      $reservation->save();
       return $reservation;
     }
     
+    public static function generateVoucherPdf($reservation) {
+      $array['item'] = $reservation;
+      $pdf = \PDF::loadView('reservation::pdf.tickets-file', $array);
+      $pdf = \Asset::apply_pdf_template($pdf, 'VOUCHER DE RESERVA');
+      $reservation->tickets_file = \Asset::upload_pdf_template($pdf, 'reservation', 'tickets_file');
+      return $reservation;
+    }
+
+    public static function hex_encode($input) {
+      return bin2hex($input.'JSBDXZ');
+    }
+
+    public static function hex_decode($input) {
+      $subresponse = pack("H*", $input);
+      return str_replace('JSBDXZ','',$subresponse);
+    }
+
     public static function process_reservation() {
         if($cart = \Solunes\Reservation\App\Cart::checkOwner()->checkCart()->status('holding')->with('cart_items','cart_items.product')->first()){
           $cart->touch();
@@ -239,5 +255,5 @@ class Reservation {
         }
         return $cart;
     }
-
+    
 }

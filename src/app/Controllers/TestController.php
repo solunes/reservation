@@ -33,4 +33,15 @@ class TestController extends Controller {
         }
     }
 
+    public function getPreivewTicket() {
+        if(\App::environment('local')){
+            $array = [];
+            $array['item'] = \Solunes\Reservation\App\Reservation::first();
+            //return view('reservation::pdf.tickets-file', $array);
+            $pdf = \PDF::loadView('reservation::pdf.tickets-file', $array);
+            $pdf = \Asset::apply_pdf_template($pdf, 'RESERVA REALIZADA Y CONFIRMADA', ['margin-top'=>0,'margin-bottom'=>0,'margin-right'=>0,'margin-left'=>0]);
+            return $pdf->stream();
+        }
+    }
+
 }

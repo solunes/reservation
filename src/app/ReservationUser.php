@@ -28,5 +28,9 @@ class ReservationUser extends Model {
     public function parent() {
         return $this->belongsTo('Solunes\Reservation\App\Reservation');
     }
+  
+    public function getNameAttribute() {
+        return $this->first_name.' '.$this->last_n;
+    }
 
 }

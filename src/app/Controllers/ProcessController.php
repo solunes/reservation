@@ -287,9 +287,6 @@ class ProcessController extends Controller {
       $reservation->sale_id = $sale->id;
       $reservation->save();
 
-      // Generar PDF y guardarlo
-      $reservation = \Reservation::generateReservationPdf($reservation);
-
       // Send Email
       $vars = ['@name@'=>$user->name, '@total_cost@'=>$sale->total_cost, '@sale_link@'=>url('process/sale/'.$sale->id)];
       \FuncNode::make_email('new-sale', [$user->email], $vars);

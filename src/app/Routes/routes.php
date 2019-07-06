@@ -11,6 +11,7 @@
 |
 */
 Route::get('test/preview-reservation', 'TestController@getPreivewReservation');
+Route::get('test/preview-ticket', 'TestController@getPreivewTicket');
 
 Route::get('reservations', 'ProcessController@getPackages');
 Route::group(['prefix'=>'reservations'], function(){
