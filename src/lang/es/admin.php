@@ -35,5 +35,6 @@ return array(
 	'week' => 'Semana',
 	'minute' => 'Minuto',
 	'pre-reserve' => 'Pre Reserva',
+	'used' => 'Usado',
 
 );

@@ -63,5 +63,8 @@ return [
     'user' => 'Usuario',
     'users_count' => 'Contador de Usuarios',
     'reservation_file' => 'Reserva en PDF',
+    'reservation_deadline' => 'Fecha Límite de Reserva',
+    'ticket' => 'Ticket',
+    'tickets_file' => 'Archivo de Ticket',
 
 ];
