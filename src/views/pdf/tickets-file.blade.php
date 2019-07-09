@@ -12,7 +12,7 @@
       .row { width: 100%; display: block; }
       .col { width: 49.8%; display: inline-block; margin: 0; padding: 0; position: relative; }
       .col img { width: 99.5%; height: auto; display: inline; margin: 0; padding: 0; }
-      .overlay { position: absolute; top: 20%; left: 10%; width: 80%; display: block; text-align: center; }
+      .overlay { position: absolute; top: 15%; left: 10%; width: 80%; display: block; text-align: center; }
       .bottom .col img {  -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -o-transform: rotate(180deg); -ms-transform: rotate(180deg); transform: rotate(180deg); filter: progid:DXImageTransform.Microsoft.Matrix(M11=-1, M12=0, M21=0, M22=-1, DX=0, DY=0, SizingMethod='auto expand'); }
       table { width: 100%; text-align: center; }
       table thead, table tfoot { font-weight: bold; }

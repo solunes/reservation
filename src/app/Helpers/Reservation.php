@@ -228,7 +228,7 @@ class Reservation {
     public static function generateVoucherPdf($reservation) {
       $array['item'] = $reservation;
       $pdf = \PDF::loadView('reservation::pdf.tickets-file', $array);
-      $pdf = \Asset::apply_pdf_template($pdf, 'VOUCHER DE RESERVA');
+      $pdf = \Asset::apply_pdf_template($pdf, 'VOUCHER DE RESERVA', ['margin-top'=>0,'margin-bottom'=>0,'margin-right'=>0,'margin-left'=>0]);
       $reservation->tickets_file = \Asset::upload_pdf_template($pdf, 'reservation', 'tickets_file');
       return $reservation;
     }
