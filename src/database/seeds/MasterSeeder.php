@@ -26,6 +26,18 @@ class MasterSeeder extends Seeder {
         \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'normal', 'type'=>'resize', 'width'=>'800']);
         \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'thumb', 'type'=>'fit', 'width'=>'300', 'height'=>'200']);
         \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'semi', 'type'=>'fit', 'width'=>'450', 'height'=>'300']);
+        $image_folder = \Solunes\Master\App\ImageFolder::create(['site_id'=>1, 'name'=>'accommodation-image_ticket', 'extension'=>'jpg']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'normal', 'type'=>'resize', 'width'=>'1132']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'thumb', 'type'=>'fit', 'width'=>'1132', 'height'=>'1476']);
+        $image_folder = \Solunes\Master\App\ImageFolder::create(['site_id'=>1, 'name'=>'accommodation-image_terms', 'extension'=>'jpg']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'normal', 'type'=>'resize', 'width'=>'1132']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'thumb', 'type'=>'fit', 'width'=>'1132', 'height'=>'1476']);
+        $image_folder = \Solunes\Master\App\ImageFolder::create(['site_id'=>1, 'name'=>'accommodation-image_schedule', 'extension'=>'jpg']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'normal', 'type'=>'resize', 'width'=>'1132']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'thumb', 'type'=>'fit', 'width'=>'1132', 'height'=>'1476']);
+        $image_folder = \Solunes\Master\App\ImageFolder::create(['site_id'=>1, 'name'=>'accommodation-image_ad', 'extension'=>'jpg']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'normal', 'type'=>'resize', 'width'=>'1132']);
+        \Solunes\Master\App\ImageSize::create(['parent_id'=>$image_folder->id, 'code'=>'thumb', 'type'=>'fit', 'width'=>'1132', 'height'=>'1476']);
 
         // Usuarios
         $admin = \Solunes\Master\App\Role::where('name', 'admin')->first();

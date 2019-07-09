@@ -27,6 +27,10 @@ class NodesReservation extends Migration
             $table->integer('duration_number')->nullable();
             $table->enum('duration_type', ['minute','hour','day'])->default('minute');
             $table->string('image')->nullable();
+            $table->string('image_ticket')->nullable();
+            $table->string('image_terms')->nullable();
+            $table->string('image_schedule')->nullable();
+            $table->string('image_ad')->nullable();
             $table->text('summary')->nullable();
             if(config('reservation.accommodation_sold_content')){
                 $table->text('sold_content')->nullable();

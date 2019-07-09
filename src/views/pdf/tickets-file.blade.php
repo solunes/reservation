@@ -31,7 +31,11 @@
   <div class="page">
     <div class="row">
       <div class="col right">
-        <img class="img-responsive" src="{{ url('assets/reservation/images/publicidad.jpg') }}" />
+        @if($item->accommodation->image_ad)
+          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation','thumb', $item->accommodation->image_ad)) }}" />
+        @else
+          <img class="img-responsive" src="{{ asset(config('reservation.reservation_image_ad')) }}" />
+        @endif
       </div>
       <div class="col left">
         <div class="overlay">
@@ -57,15 +61,27 @@
             </tbody>
           </table>
         </div>
-        <img class="img-responsive" src="{{ url('assets/reservation/images/ticket.jpg') }}" />
+        @if($item->accommodation->image_ticket)
+          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation','thumb', $item->accommodation->image_ticket)) }}" />
+        @else
+          <img class="img-responsive" src="{{ asset(config('reservation.reservation_image_ticket')) }}" />
+        @endif
       </div>
     </div>
     <div class="row bottom">
       <div class="col right">
-        <img class="img-responsive" src="{{ url('assets/reservation/images/terminos.jpg') }}" />
+        @if($item->accommodation->image_terms)
+          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation','thumb', $item->accommodation->image_terms)) }}" />
+        @else
+          <img class="img-responsive" src="{{ asset(config('reservation.reservation_image_terms')) }}" />
+        @endif
       </div>
       <div class="col left">
-        <img class="img-responsive" src="{{ url('assets/reservation/images/cronograma.jpg') }}" />
+        @if($item->accommodation->image_schedule)
+          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation','thumb', $item->accommodation->image_schedule)) }}" />
+        @else
+          <img class="img-responsive" src="{{ asset(config('reservation.reservation_image_schedule')) }}" />
+        @endif
       </div>
     </div>
   </div>

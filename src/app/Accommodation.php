@@ -61,6 +61,10 @@ class Accommodation extends Model {
         return $this->hasMany('Solunes\Reservation\App\Reservation')->whereIn('status', ['pre-reserve','sale','paid','finished']);
     }
 
+    public function currency() {
+        return $this->belongsTo('Solunes\Business\App\Currency');
+    }
+
     public function product_bridge() {
         return $this->hasOne('Solunes\Business\App\ProductBridge','product_id')->where('product_type', 'accommodation');
     }

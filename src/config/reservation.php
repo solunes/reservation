@@ -13,5 +13,9 @@ return [
 	'reservation_subuser_email' => false,
 	'reservation_subuser_username' => false,
 	'reservation_subuser_age' => false,
+	'reservation_image_ticket' => 'assets/reservation/images/ticket.jpg',
+	'reservation_image_terms' => 'assets/reservation/images/terminos.jpg',
+	'reservation_image_schedule' => 'assets/reservation/images/cronograma.jpg',
+	'reservation_image_ad' => 'assets/reservation/images/publicidad.jpg',
 
 ];
