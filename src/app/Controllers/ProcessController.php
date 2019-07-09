@@ -278,7 +278,7 @@ class ProcessController extends Controller {
             $reservation_user->age = $request->input('age');
           }
           $reservation_user->save();
-          $sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>1, 'amount'=>$reservation->price, 'detail'=>$reservation->name.' - '.$reservation->initial_date.' '.$reservation->initial_time.' a '.$reservation->end_date.' '.$reservation->end_time];
+          //$sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>1, 'amount'=>$reservation->price, 'detail'=>$reservation->name.' - '.$reservation->initial_date.' '.$reservation->initial_time.' a '.$reservation->end_date.' '.$reservation->end_time];
         }
       }
       $reservation->load('reservation_users');

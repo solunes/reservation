@@ -85,4 +85,8 @@ class Reservation extends Model {
         return $this->hasMany('Solunes\Reservation\App\ReservationUser','parent_id');
     }
 
+    public function product_bridge() {
+        return $this->hasOne('Solunes\Business\App\ProductBridge')->where('product_type', 'ticket');
+    }
+
 }
