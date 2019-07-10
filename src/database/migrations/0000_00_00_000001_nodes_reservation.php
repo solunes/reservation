@@ -97,8 +97,8 @@ class NodesReservation extends Migration
             $table->decimal('price', 10, 2)->nullable();
             $table->decimal('amount', 10, 2)->nullable();
             $table->date('initial_date')->nullable();
-            $table->date('end_date')->nullable();
             $table->time('initial_time')->nullable();
+            $table->date('end_date')->nullable();
             $table->time('end_time')->nullable();
             $table->timestamp('reservation_deadline')->nullable();
             $table->boolean('invoice')->nullable();

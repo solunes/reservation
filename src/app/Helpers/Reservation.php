@@ -257,15 +257,29 @@ class Reservation {
     public static function validate_reservation_user($reservation_user_id) {
       $reservation_user = \Solunes\Reservation\App\ReservationUser::where('id',$reservation_user_id)->first();
       if($reservation_user&&$reservation_user->status=='paid'){
-        $reservation_user->status = 'used';
-        $reservation_user->save();
-        $response = ['process'=>true,'message'=>'Su ticket fue validado correctamente.'];
+        $reservation = $reservation_user->reservation;
+        $timestamp = date('Y-m-d H:i:s');
+        $reservation_timestamp_end = $reservation->end_date.' '.$reservation->end_time;
+        if($timestamp<$reservation_timestamp_end&&$reservation->status=='paid'){
+          $reservation_user->status = 'used';
+          $reservation_user->save();
+          $reservation->load('reservation_users');
+          if($reservation->reservation_users()->where('status','used')->count()==$reservation->counts){
+            $reservation->status = 'finished';
+            $reservation->save();
+          }
+          $response = ['status'=>'success','message'=>'Su ticket fue validado correctamente.'];
+        } else if($reservation->status=='paid') {
+          $response = ['status'=>'warning','message'=>'El ticket aún está válido, sin embargo la fecha de uso debía ser antes del '.$reservation->end_date.' '.$reservation->end_time.'.'];
+        } else {
+          $response = ['status'=>'error','message'=>'Su ticket fue encontrado, sin embargo su reserva se encuentra invalida.'];
+        }
       } else if($reservation_user&&$reservation_user->status=='used') {
-        $response = ['process'=>false,'message'=>'Su ticket fue encontrado, sin embargo ya fue utilizado.'];
+        $response = ['status'=>'error','message'=>'Su ticket fue encontrado, sin embargo ya fue utilizado.'];
       } else if($reservation_user) {
-        $response = ['process'=>false,'message'=>'Su ticket fue encontrado, sin embargo no se encuentra habilitado.'];
+        $response = ['status'=>'error','message'=>'Su ticket fue encontrado, sin embargo no se encuentra habilitado.'];
       } else {
-        $response = ['process'=>false,'message'=>'Su ticket no fue encontrado en la base de datos.'];
+        $response = ['status'=>'error','message'=>'Su ticket no fue encontrado en la base de datos.'];
       }
       return $response;
     }
