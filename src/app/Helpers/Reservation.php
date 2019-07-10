@@ -242,18 +242,46 @@ class Reservation {
       return str_replace('JSBDXZ','',$subresponse);
     }
 
+    public static function validate_qr_reservation_user($encrypted_code) {
+      $reservation_user_id = \Crypt::decrypt($encrypted_code);
+      $response = \Reservation::validate_reservation_user($reservation_user_id);
+      return $response;
+    }
+    
+    public static function validate_manual_reservation_user($hex_code) {
+      $reservation_user_id = \Reservation::hex_code($hex_code);
+      $response = \Reservation::validate_reservation_user($reservation_user_id);
+      return $response;
+    }
+    
+    public static function validate_reservation_user($reservation_user_id) {
+      $reservation_user = \Solunes\Reservation\App\ReservationUser::where('id',$reservation_user_id)->first();
+      if($reservation_user&&$reservation_user->status=='paid'){
+        $reservation_user->status = 'used';
+        $reservation_user->save();
+        $response = ['process'=>true,'message'=>'Su ticket fue validado correctamente.'];
+      } else if($reservation_user&&$reservation_user->status=='used') {
+        $response = ['process'=>false,'message'=>'Su ticket fue encontrado, sin embargo ya fue utilizado.'];
+      } else if($reservation_user) {
+        $response = ['process'=>false,'message'=>'Su ticket fue encontrado, sin embargo no se encuentra habilitado.'];
+      } else {
+        $response = ['process'=>false,'message'=>'Su ticket no fue encontrado en la base de datos.'];
+      }
+      return $response;
+    }
+
     public static function process_reservation() {
-        if($cart = \Solunes\Reservation\App\Cart::checkOwner()->checkCart()->status('holding')->with('cart_items','cart_items.product')->first()){
-          $cart->touch();
-        } else {
-          $cart = new \Solunes\Reservation\App\Cart;
-          if(\Auth::check()){
-            $cart->user_id = \Auth::user()->id;
-          }
-          $cart->session_id = \Session::getId();
-          $cart->save();
+      if($cart = \Solunes\Reservation\App\Cart::checkOwner()->checkCart()->status('holding')->with('cart_items','cart_items.product')->first()){
+        $cart->touch();
+      } else {
+        $cart = new \Solunes\Reservation\App\Cart;
+        if(\Auth::check()){
+          $cart->user_id = \Auth::user()->id;
         }
-        return $cart;
+        $cart->session_id = \Session::getId();
+        $cart->save();
+      }
+      return $cart;
     }
     
 }
