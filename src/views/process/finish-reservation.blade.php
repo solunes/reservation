@@ -75,25 +75,31 @@
 
 							<form class="form-horizontal" method="post" action="{{ url('auth/login') }}">
 								<div class="form-group">
-									<label for="inputEmail3" class="col-sm-12 control-label">Email o Celular</label>									
-									<input name="user" type="email" class="form-control" id="inputEmail3" placeholder="Email o Celular de Registro">									
+									<label for="inputPassword3" class="col-sm-12 control-label">Email o Celular</label>
+									<div class="col-sm-12">
+										<input name="user" type="email" class="form-control" id="inputEmail3" placeholder="Email o Celular de Registro">
+									</div>
 								</div>
-								
 								<div class="form-group">
 									<label for="inputPassword3" class="col-sm-12 control-label">Contraseña</label>
-									<input name="password" type="password" class="form-control" id="inputPassword3" placeholder="Contraseña">
+									<div class="col-sm-12">
+										<input name="password" type="password" class="form-control" id="inputPassword3" placeholder="Contraseña" />
+									</div>
 								</div>
-
 								<div class="form-group">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox"> Recuérdame
-										</label>
+									<div class="col-sm-12">
+										<div class="checkbox">
+											<label>
+												<input type="checkbox"> Recuérdame
+											</label>
+										</div>
 									</div>
 								</div>
 
 								<div class="form-group">
-									<button type="submit" class="btn">Iniciar Sesión</button>
+									<div class="col-sm-12">
+										<button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+									</div>
 								</div>
 							</form>
 							
