@@ -35,7 +35,7 @@
               <p>{{ $item->summary }}</p>
               <form method="post" action="{{ url('reservations/start-reservation') }}">
                 @if($item->total_max>1)
-                <h3 class="cost"><span class="glyphicon glyphicon-usd"></span> Precio por Persona: Bs. {{ $item->price }}
+                <h3 class="cost">Precio por Persona: Bs. {{ $item->price }}
                   <!--<small class="pre-cost"><span class="glyphicon glyphicon-usd"></span> Bs. 50.00 por persona</small>-->
                 </h3>
                 <div class="row pt-30">
@@ -48,7 +48,7 @@
                   </div>
                 </div>
                 @else
-                <h3 class="cost"><span class="glyphicon glyphicon-usd"></span> Precio: Bs. {{ $item->price }}
+                <h3 class="cost">Precio: Bs. {{ $item->price }}
                   <!--<small class="pre-cost"><span class="glyphicon glyphicon-usd"></span> Bs. 50.00 por persona</small>-->
                 </h3>
                   <input type="hidden" name="counts" value="1" />

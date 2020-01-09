@@ -66,8 +66,11 @@ return [
     'reservation_deadline' => 'Fecha Límite de Reserva',
     'ticket' => 'Ticket',
     'tickets_file' => 'Archivo de Ticket',
+    'image_ad' => 'Imagen Anuncio',
+    'image_schedule' => 'Imagen de Cronograma',
+    'image_terms' => 'Imagen de Términos',
+    'image_ticket' => 'Imagen de Ticket',
     'ticket_code' => 'Código de Ticket',
     'manual_ticket_code' => 'Código Manual de Ticket',
-
-
+    
 ];
