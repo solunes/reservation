@@ -66,5 +66,8 @@ return [
     'reservation_deadline' => 'Fecha Límite de Reserva',
     'ticket' => 'Ticket',
     'tickets_file' => 'Archivo de Ticket',
+    'ticket_code' => 'Código de Ticket',
+    'manual_ticket_code' => 'Código Manual de Ticket',
+
 
 ];

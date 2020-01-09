@@ -4,6 +4,9 @@ return [
 
 	// GENERAL
 	'after_seed' => true,
+	'code_length' => 32,
+	'manual_code_length' => 8,
+	'manual_code_length' => 6,
 	'type' => 'list',
 	'prereserve_deadline' => '+1 hour',
 	'sale_deadline' => '+12 hours',

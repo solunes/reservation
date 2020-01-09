@@ -242,20 +242,29 @@ class Reservation {
       return str_replace('JSBDXZ','',$subresponse);
     }
 
-    public static function validate_qr_reservation_user($encrypted_code) {
-      $reservation_user_id = \Crypt::decrypt($encrypted_code);
-      $response = \Reservation::validate_reservation_user($reservation_user_id);
+    public static function generateTicketCode() {
+        $digits = config('reservation.code_length');
+        return \FuncNode::generateUniqueCode('reservation-qr-code', $digits);
+    }
+
+    public static function generateManualTicketCode() {
+        $digits = config('reservation.manual_code_length');
+        return \FuncNode::generateUniqueCode('reservation-manual-code', $digits);
+    }
+
+    public static function validate_qr_reservation_user($ticket_qr_code) {
+      $reservation_user = \App\ReservationUser::where('ticket_code', $ticket_qr_code)->first();
+      $response = \Reservation::validate_reservation_user($reservation_user);
       return $response;
     }
     
-    public static function validate_manual_reservation_user($hex_code) {
-      $reservation_user_id = \Reservation::hex_code($hex_code);
-      $response = \Reservation::validate_reservation_user($reservation_user_id);
+    public static function validate_manual_reservation_user($manual_ticket_code) {
+      $reservation_user = \App\ReservationUser::where('manual_ticket_code', $manual_ticket_code)->first();
+      $response = \Reservation::validate_reservation_user($reservation_user);
       return $response;
     }
     
-    public static function validate_reservation_user($reservation_user_id) {
-      $reservation_user = \Solunes\Reservation\App\ReservationUser::where('id',$reservation_user_id)->first();
+    public static function validate_reservation_user($reservation_user) {
       if($reservation_user&&$reservation_user->status=='paid'){
         $reservation = $reservation_user->reservation;
         $timestamp = date('Y-m-d H:i:s');

@@ -28,7 +28,15 @@ class ReservationUser extends Model {
     public function parent() {
         return $this->belongsTo('Solunes\Reservation\App\Reservation');
     }
-  
+      
+    public function unique_check() {
+        return $this->belongsTo('Solunes\Master\App\UniqueCkeck')->where('key','reservation-code');
+    }
+      
+    public function manual_unique_check() {
+        return $this->belongsTo('Solunes\Master\App\UniqueCkeck')->where('key','manual-reservation-code');
+    }
+
     public function getNameAttribute() {
         return $this->first_name.' '.$this->last_n;
     }

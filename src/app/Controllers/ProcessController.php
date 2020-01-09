@@ -255,8 +255,8 @@ class ProcessController extends Controller {
       $detail .= $reservation->end_time.')';
       $sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>$reservation->counts, 'amount'=>$reservation->price, 'detail'=>$detail];
 
-      if($request->input('counts')>1){
-        foreach(range(2, $request->input('counts')) as $subcount){
+      if($reservation->counts>1){
+        foreach(range(2, $reservation->counts) as $subcount){
           $reservation_user = new \Solunes\Reservation\App\ReservationUser;
           $reservation_user->parent_id = $reservation->id;
           if(config('reservation.reservation_subuser_name')){

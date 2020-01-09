@@ -113,6 +113,8 @@ class NodesReservation extends Migration
         Schema::create('reservation_users', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id')->unsigned();
+            $table->string('ticket_code')->nullable();
+            $table->string('manual_ticket_code')->nullable();
             $table->string('first_name')->nullable();
             if(config('reservation.reservation_subuser_name')){
                 $table->string('last_name')->nullable();

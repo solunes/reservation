@@ -54,8 +54,8 @@
                   <h4>{{ $item->currency->code.' '.$item->price }}</h4>
                 </td>
                 <td>
-                  <img class="img-responsive" src="data:image/png;base64, {{ base64_encode(\QrCode::format('png')->margin(0)->size(500)->generate(\Crypt::encrypt($reservation_user->id))) }} ">
-                  <h3>{{ \Reservation::hex_encode($reservation_user->id) }}</h3>
+                  <img class="img-responsive" src="data:image/png;base64, {{ base64_encode(\QrCode::format('png')->margin(0)->size(500)->generate($reservation_user->ticket_code)) }} ">
+                  <h3>{{ $reservation_user->manual_ticket_code }}</h3>
                 </td>
               </tr>
             </tbody>
