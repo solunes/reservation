@@ -61,6 +61,18 @@ class Accommodation extends Model {
         return $this->hasMany('Solunes\Reservation\App\Reservation')->whereIn('status', ['pre-reserve','sale','paid','finished']);
     }
 
+    public function accommodation() {
+        return $this->belongsTo('Solunes\Reservation\App\Accommodation','parent_id');
+    }
+
+    public function parent() {
+        return $this->belongsTo('Solunes\Reservation\App\Accommodation');
+    }
+
+    public function childs() {
+        return $this->hasMany('Solunes\Reservation\App\Accommodation','parent_id');
+    }
+
     public function currency() {
         return $this->belongsTo('Solunes\Business\App\Currency');
     }

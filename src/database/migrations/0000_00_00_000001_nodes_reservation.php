@@ -15,6 +15,7 @@ class NodesReservation extends Migration
         // Módulo de Reservas
         Schema::create('accommodations', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('parent_id')->nullable();
             $table->string('name')->nullable();
             $table->enum('type', ['open','closed'])->default('open');
             $table->enum('interval', ['hour','day'])->default('hour');
