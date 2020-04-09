@@ -62,7 +62,7 @@
           </table>
         </div>
         @if($item->accommodation->image_ticket)
-          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation','thumb', $item->accommodation->image_ticket)) }}" />
+          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation-image_ticket','normal', $item->accommodation->image_ticket)) }}" />
         @else
           <img class="img-responsive" src="{{ asset(config('reservation.reservation_image_ticket')) }}" />
         @endif
@@ -71,14 +71,14 @@
     <div class="row bottom">
       <div class="col right">
         @if($item->accommodation->image_terms)
-          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation','thumb', $item->accommodation->image_terms)) }}" />
+          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation-image_terms','normal', $item->accommodation->image_terms)) }}" />
         @else
           <img class="img-responsive" src="{{ asset(config('reservation.reservation_image_terms')) }}" />
         @endif
       </div>
       <div class="col left">
         @if($item->accommodation->image_schedule)
-          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation','thumb', $item->accommodation->image_schedule)) }}" />
+          <img class="img-responsive" src="{{ asset(\Asset::get_image_path('accommodation-image_schedule','normal', $item->accommodation->image_schedule)) }}" />
         @else
           <img class="img-responsive" src="{{ asset(config('reservation.reservation_image_schedule')) }}" />
         @endif
