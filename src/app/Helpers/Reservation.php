@@ -194,7 +194,7 @@ class Reservation {
               if(in_array($available_time['time_in'], $occupied_times)){
                 if(auth()->check()&&$occupied_times_detail[$available_time['time_in']]['user_id']==auth()->user()->id){
                   $date_durations[$available_date][] = array_merge($available_time, ['status'=>$occupied_times_detail[$available_time['time_in']]['status'],'date_out'=>$new_end_date,'user_id'=>$occupied_times_detail[$available_time['time_in']]['user_id'],'reservation_id'=>$occupied_times_detail[$available_time['time_in']]['reservation_id'],'count'=>$occupied_times_detail[$available_time['time_in']]['count']]);
-                } else if(($occupied_times_detail[$available_time['time_in']]['count']+$reservation->counts)>$service->capacity) {
+                } else if(($occupied_times_detail[$available_time['time_in']]['count'])>$service->capacity) {
                   $date_durations[$available_date][] = array_merge($available_time, ['status'=>'unavailable','date_out'=>$new_end_date,'user_id'=>NULL,'reservation_id'=>NULL,'count'=>$occupied_times_detail[$available_time['time_in']]['count']]);
                 } else {
                   $date_durations[$available_date][] = array_merge($available_time, ['status'=>'free','date_out'=>$new_end_date,'user_id'=>NULL,'reservation_id'=>NULL,'count'=>$occupied_times_detail[$available_time['time_in']]['count']]);
