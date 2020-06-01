@@ -46,15 +46,22 @@ class NodesReservation extends Migration
             $table->boolean('active')->nullable()->default(0);
             $table->timestamps();
         });
+        Schema::create('providers', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->nullable();
+            $table->string('image')->nullable();
+            $table->integer('capacity')->nullable(); // Toma por defecto de evento
+            $table->timestamps();
+        });
         Schema::create('accommodation_ranges', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id')->unsigned();
+            $table->integer('provider_id')->nullable();
             $table->enum('initial_day', ['d_01','d_02','d_03','d_04','d_05','d_06','d_07'])->default('d_01');
             $table->integer('duration_nights')->nullable()->default(0);
             $table->integer('max_reservation_days')->nullable()->default(90);
             $table->time('initial_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->integer('capacity')->nullable(); // Toma por defecto de evento
             $table->decimal('price', 10, 2)->nullable(); // Toma por defecto de evento
             $table->timestamps();
             $table->foreign('parent_id')->references('id')->on('accommodations')->onDelete('cascade');
@@ -62,12 +69,12 @@ class NodesReservation extends Migration
         Schema::create('accommodation_spaces', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id')->unsigned();
+            $table->integer('provider_id')->nullable();
             $table->string('name')->nullable();
             $table->date('initial_date')->nullable();
             $table->date('end_date')->nullable();
             $table->time('initial_time')->nullable();
             $table->time('end_time')->nullable();
-            $table->integer('capacity')->nullable(); // Toma por defecto de evento
             $table->decimal('price', 10, 2)->nullable(); // Toma por defecto de evento
             $table->timestamps();
             $table->foreign('parent_id')->references('id')->on('accommodations')->onDelete('cascade');
