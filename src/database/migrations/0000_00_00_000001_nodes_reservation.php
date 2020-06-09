@@ -97,6 +97,7 @@ class NodesReservation extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('accommodation_id')->unsigned();
+            $table->integer('provider_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->integer('customer_id')->nullable();
             $table->integer('sale_id')->nullable();

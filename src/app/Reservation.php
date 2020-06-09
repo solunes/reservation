@@ -72,6 +72,10 @@ class Reservation extends Model {
     public function customer() {
         return $this->belongsTo('Solunes\Customer\App\Customer');
     }
+    
+    public function provider() {
+        return $this->belongsTo('Solunes\Reservation\App\Provider');
+    }
 
     public function currency() {
         return $this->belongsTo('Solunes\Business\App\Currency');
