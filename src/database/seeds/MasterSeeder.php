@@ -15,6 +15,7 @@ class MasterSeeder extends Seeder {
     {
 
         // Módulo General de Empresa ERP
+        $node_provider = \Solunes\Master\App\Node::create(['name'=>'provider', 'location'=>'reservation', 'folder'=>'reservation']);
         $node_accommodation = \Solunes\Master\App\Node::create(['name'=>'accommodation', 'location'=>'reservation', 'folder'=>'reservation']);
         $node_accommodation_range = \Solunes\Master\App\Node::create(['name'=>'accommodation-range', 'location'=>'reservation', 'folder'=>'reservation', 'type'=>'child', 'parent_id'=>$node_accommodation->id]);
         $node_accommodation_space = \Solunes\Master\App\Node::create(['name'=>'accommodation-space', 'location'=>'reservation', 'folder'=>'reservation', 'type'=>'child', 'parent_id'=>$node_accommodation->id]);

@@ -69,6 +69,14 @@ class Accommodation extends Model {
         return $this->belongsTo('Solunes\Reservation\App\Accommodation');
     }
 
+    public function accommodation_childs() {
+        return $this->hasMany('Solunes\Reservation\App\Accommodation','parent_id');
+    }
+
+    public function provider() {
+        return $this->belongsTo('Solunes\Reservation\App\Provider');
+    }
+
     public function childs() {
         return $this->hasMany('Solunes\Reservation\App\Accommodation','parent_id');
     }
