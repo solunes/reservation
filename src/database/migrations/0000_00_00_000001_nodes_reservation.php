@@ -155,6 +155,7 @@ class NodesReservation extends Migration
         // Módulo General de Tareas
         Schema::dropIfExists('reservation_users');
         Schema::dropIfExists('reservations');
+        Schema::dropIfExists('providers');
         // Módulo General de Tareas
         Schema::dropIfExists('accommodation_picks');
         Schema::dropIfExists('accommodation_spaces');
