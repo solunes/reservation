@@ -14,6 +14,11 @@ Route::get('test/preview-reservation', 'TestController@getPreivewReservation');
 Route::get('test/preview-ticket', 'TestController@getPreivewTicket');
 
 Route::get('reservations', 'ProcessController@getPackages');
+
+Route::get('reservaciones/{step?}/{accommodation?}/{provider_id?}', array('as' => 'ProcessController', 'uses' => 'ProcessController@findReservas'));
+Route::get('seleccionar-horarios/{reservation_id}/{date?}', array('as' => 'ProcessController', 'uses' => 'ProcessController@findSelectSchedule'));
+Route::get('finalizar-reserva/{reservation_id}', array('as' => 'ProcessController', 'uses' => 'ProcessController@findReserva'));
+
 Route::group(['prefix'=>'reservations'], function(){
     Route::get('my-reservations/{token}', 'ProcessController@getMyReservations');
     Route::get('reservation/{reservation_id}', 'ProcessController@getReservation');

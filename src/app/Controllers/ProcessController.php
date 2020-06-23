@@ -49,6 +49,89 @@ class ProcessController extends Controller {
     return view('reservation::process.package-item', $array);
   }
 
+  public function findReservas($step = 1, $accommodation_id = NULL, $provider_id = NULL) {
+    if($accommodation_id){
+      $array['items'] = \Solunes\Reservation\App\Accommodation::where('parent_id', $accommodation_id)->get();
+      $item = \Solunes\Reservation\App\Accommodation::find($accommodation_id);
+      $array['item'] = $item; 
+    } else {
+      $array['items'] = \Solunes\Reservation\App\Accommodation::whereNull('parent_id')->get();
+    }
+    $array['step'] = $step;
+    $array['accommodation_id'] = $accommodation_id;
+    if($step==2){
+      $array['providers'] = \Solunes\Reservation\App\Provider::where('id', $item->provider_id)->get();
+    }
+    if($step==3){
+      $array['provider'] = \Solunes\Reservation\App\Provider::find($provider_id);
+      $reservation = new \Solunes\Reservation\App\Reservation;
+      $reservation->accommodation_id = $accommodation_id;
+      $reservation->provider_id = $provider_id;
+      $reservation->currency_id = $item->currency_id;
+      $reservation->counts = 1;
+      $reservation->name = $item->name;
+      $reservation->price = $item->price;
+      $reservation->amount = $item->price;
+      $reservation->save();
+      return redirect('seleccionar-horarios/'.$reservation->id);
+    }
+    return view('reservation::process.reservas-'.$step, $array);
+  }
+
+  public function findSelectSchedule($reservation_id, $date_today = NULL) {
+    if(!$date_today){
+      $date_today = date('Y-m-d');
+    }
+    $reservation = \Solunes\Reservation\App\Reservation::find($reservation_id);
+    $accommodation = $reservation->accommodation;
+    $provider = $reservation->provider;
+    $array['item'] = $accommodation;  
+    $array['provider'] = $provider; 
+    $array['reservation'] = $reservation; 
+    $strtotime_today = strtotime($date_today);
+    $today = date('N', $strtotime_today);
+    $next_week = true;
+    if($today==1){
+      $date_start = date('Y-m-d', $strtotime_today);
+      $next_week_date = date('Y-m-d', strtotime("+7 days", $strtotime_today));
+    } else {
+      $date_start = date('Y-m-d', strtotime("last Monday", $strtotime_today));
+      $next_week_date = date('Y-m-d', strtotime("next Monday", $strtotime_today));
+    }
+    if($date_start<=date('Y-m-d')){
+    $past_week = false;
+    $past_week_date = NULL;
+    } else {
+      $past_week = true;
+    $past_week_date = date('Y-m-d', strtotime("-7 days", $strtotime_today));
+    }
+  $date_end = strtotime($date_start);
+  $date_end = strtotime("+7 days", $date_end);
+      $date_end = date('Y-m-d', $date_end);
+    $array['past_week_date'] = $past_week_date; 
+    $array['next_week_date'] = $next_week_date; 
+    $array['past_week'] = $past_week; 
+    $array['next_week'] = $next_week; 
+    $array['date_start'] = $date_start; 
+    $array['date_end'] = $date_end; 
+    $array['reservation'] = $reservation; 
+      $array['available_dates'] = \Reservation::getNewAvailableDays($accommodation, $date_start, $date_end);
+      $array['available_times'] = \Reservation::getFinalAvailableTimes($accommodation, $date_start, $date_end);
+      $taken_dates = \Reservation::getTakenItems($provider, $date_start, $date_end);
+      $array['finalitems'] = \Reservation::getNewOccupancyHours($accommodation, $provider, $array['available_dates'], $array['available_times'], $taken_dates, $reservation);
+    return view('reservation::process.reservas-3', $array);
+  }
+
+  public function findReserva($reservation_id) {
+    $reservation = \Solunes\Reservation\App\Reservation::find($reservation_id);
+    $accommodation = $reservation->accommodation;
+    $provider = $reservation->provider;
+    $array['item'] = $accommodation;  
+    $array['provider'] = $provider; 
+    $array['reservation'] = $reservation; 
+    return view('reservation::process.reservas-4', $array);
+  }
+
   /* Ruta POST para iniciar un proceso de reserva */
   public function postStartReservation(Request $request) {
     $accommodation = \Solunes\Reservation\App\Accommodation::find($request->input('accommodation_id'));
@@ -120,7 +203,8 @@ class ProcessController extends Controller {
       }
       $reservation->save();
       // Marcar como preseleccionado para que otro no pueda comprar basandose en cupo y dar plazo para finalizar la reserva.
-      return redirect('reservations/finish-reservation/'.$accommodation->id.'/'.$reservation->id)->with('message_success', 'Su proceso de reserva fue realizado correctamente, ahora puede registrar sus datos y finalizarla.');
+      return redirect('finalizar-reserva/'.$reservation->id)->with('message_success', 'Su proceso de reserva fue realizado correctamente, ahora puede registrar sus datos y finalizarla.');
+      //return redirect('reservations/finish-reservation/'.$accommodation->id.'/'.$reservation->id)->with('message_success', 'Su proceso de reserva fue realizado correctamente, ahora puede registrar sus datos y finalizarla.');
     } else {
       return redirect($this->prev)->with('message_error', 'Hubo un error al seleccionar su reserva.');
     }

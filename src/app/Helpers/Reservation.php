@@ -156,17 +156,17 @@ class Reservation {
         return $array;
     }
 
-    public static function getTakenItems($service, $date_start, $date_end) {
+    public static function getTakenItems($provider, $date_start, $date_end) {
         $array = [];
-        $items = $service->active_reservations()->where('initial_date', '>=', $date_start)->where('end_date', '<=', $date_end)->orderBy('initial_date','ASC')->orderBy('initial_time','ASC')->get();
+        $items = $provider->active_reservations()->where('initial_date', '>=', $date_start)->where('end_date', '<=', $date_end)->orderBy('initial_date','ASC')->orderBy('initial_time','ASC')->get();
         if(count($items)==0){
-          $items = $service->active_reservations()->where('initial_date', '>=', date('Y-m-d'))->where('initial_time', '>=', date('H:i:s'))->get();
+          $items = $provider->active_reservations()->where('initial_date', '>=', date('Y-m-d'))->where('initial_time', '>=', date('H:i:s'))->get();
         }
         foreach($items as $item){
-          if(!isset($array[$item->initial_date][$item->initial_time])){
-            $array[$item->initial_date][$item->initial_time] = ['time_in'=>$item->initial_time,'date_out'=>$item->end_date,'time_out'=>$item->end_time,'user_id'=>$item->user_id,'status'=>$item->status,'reservation_id'=>$item->id,'count'=>$item->counts];
+          if(!isset($array[$item->initial_time][$item->initial_date])){
+            $array[$item->initial_time][$item->initial_date] = ['time_in'=>$item->initial_time,'date_out'=>$item->end_date,'time_out'=>$item->end_time,'user_id'=>$item->user_id,'status'=>$item->status,'reservation_id'=>$item->id,'count'=>$item->counts];
           } else {
-            $array[$item->initial_date][$item->initial_time]['count'] = $array[$item->initial_date][$item->initial_time]['count']+$item->counts;
+            $array[$item->initial_time][$item->initial_date]['count'] = $array[$item->initial_time][$item->initial_date]['count']+$item->counts;
           }
         }
         return $array;
@@ -215,6 +215,64 @@ class Reservation {
           }
         }
         return $date_durations;
+    }
+
+    public static function getNewAvailableDays($accommodation, $date_start, $date_end) {
+      $period = new \DatePeriod(
+        new \DateTime($date_start),
+        new \DateInterval('P1D'),
+        new \DateTime($date_end)
+      );
+      $dates_array = [];
+      foreach($period as $date){
+        $date_val = $date->format('Y-m-d');
+        $date_day = 'd_0'.($date->format('N'));
+        $dates_array[trans('reservation::admin.'.$date_day)] = $date->format('Y-m-d');
+      }
+      return $dates_array;
+    }
+
+    public static function getFinalAvailableTimes($accommodation, $date_start, $date_end) {
+      $period = new \DatePeriod(
+        new \DateTime($date_start),
+        new \DateInterval('P1D'),
+        new \DateTime($date_end)
+      );
+      $dates_array = [];
+      foreach($period as $date){
+        $date_val = $date->format('Y-m-d');
+        $date_day = 'd_0'.($date->format('w'));
+        foreach($accommodation->accommodation_ranges()->where('initial_day', $date_day)->get() as $accommodation_range){
+          if(isset($dates_array[$accommodation_range->initial_time][$date_val])){
+            $quantity = $dates_array[$accommodation_range->initial_time][$date_val]['quantity'] + 1;
+            $dates_array[$accommodation_range->initial_time][$date_val] = ['initial_time'=>$accommodation_range->initial_time, 'end_time'=>$accommodation_range->end_time, 'quantity'=>$quantity];
+          } else {
+            $dates_array[$accommodation_range->initial_time][$date_val] = ['initial_time'=>$accommodation_range->initial_time, 'end_time'=>$accommodation_range->end_time, 'quantity'=>1];
+          }
+        }
+      }
+      return $dates_array;
+    }
+
+    public static function getNewOccupancyHours($accommodation, $provider, $available_dates, $available_times, $taken_dates, $reservation = NULL) {
+      /*\Log::info('available_times: '.json_encode($available_times));*/
+      //\Log::info('taken_dates: '.json_encode($taken_dates));
+      $date_durations = [];
+      foreach($available_times as $time => $time_item){
+        foreach($available_dates as $date_day => $subday){
+          if(($subday>date('Y-m-d')||($subday==date('Y-m-d')&&$time>date('H:i:s')))&&isset($available_times[$time][$subday])){
+            if(isset($taken_dates[$time][$subday])&&$taken_dates[$time][$subday]['count']>=$provider->capacity){
+              $date_durations[$time][$subday] = ['status'=>'disabled', 'end_time'=>$time_item[$subday]['end_time']];
+            } else {
+              $date_durations[$time][$subday] = ['status'=>'free', 'end_time'=>$time_item[$subday]['end_time']];
+            }
+          } else {
+            $date_durations[$time][$subday] = ['status'=>'disabled', 'end_time'=>null];
+          }
+          //$date_durations[$available_time][] = array_merge($available_date, ['status'=>'free','date_out'=>$new_end_date,'user_id'=>NULL,'reservation_id'=>NULL,'count'=>0]);
+        }
+      }
+      return $date_durations;
     }
 
     public static function generateReservationPdf($reservation) {

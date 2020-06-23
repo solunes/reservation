@@ -36,4 +36,8 @@ class Provider extends Model {
         return $this->hasMany('Solunes\Reservation\App\Accommodation');
     }
 
+    public function active_reservations() {
+        return $this->hasMany('Solunes\Reservation\App\Reservation')->whereIn('status', ['pre-reserve','sale','paid','finished']);
+    }
+    
 }

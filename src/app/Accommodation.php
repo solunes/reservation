@@ -102,8 +102,9 @@ class Accommodation extends Model {
     }
 
     public function getItemsAttr($reservation) {
-    	$date_start = date('Y-m-d');
-		$date_end = strtotime($date_start);
+    	$date_start = strtotime("last Monday");
+        $date_start = date('Y-m-d', $date_start);
+        $date_end = strtotime($date_start);
 		$date_end = strtotime("+14 days", $date_end);
         $date_end = date('Y-m-d', $date_end);
     	if($this->type=='day'){
