@@ -28,6 +28,13 @@ class Reservation extends Model {
         'nit_social'=>'required',
     );
 
+    /* Sending auth rules */
+    public static $rules_reservation_send = array(
+        'name'=>'required',
+        'email'=>'required',
+        'cellphone'=>'required',
+    );
+
 	/* Creating rules */
 	public static $rules_create = array(
 		'accommodation_id'=>'required',

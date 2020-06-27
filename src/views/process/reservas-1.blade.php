@@ -65,14 +65,14 @@
                     </div>
                     @if(count($subitem->accommodation_childs)>0)
                       <div class="cart-footer">
-                          <a href="{{ url('reservaciones/'.$step.'/'.$subitem->id) }}" class="btn btn-primary">Seleccionar</a>
+                          <a href="{{ url('reservas/proceso/'.$step.'/'.$subitem->id) }}" class="btn btn-primary">Seleccionar</a>
                       </div>
                     @else
                       <div class="card-subfooter">
                           <i class="icon-time"></i> {{ $subitem->duration_number }} {{ trans('reservation::admin.'.$item->duration_type) }}s
                       </div>
                       <div class="cart-footer">
-                          <a href="{{ url('reservaciones/'.($step+1).'/'.$subitem->id) }}" class="btn btn-primary">Seleccionar</a>
+                          <a href="{{ url('reservas/proceso/'.($step+1).'/'.$subitem->id) }}" class="btn btn-primary">Seleccionar</a>
                       </div>
                     @endif
                 </div>

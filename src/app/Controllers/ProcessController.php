@@ -73,7 +73,7 @@ class ProcessController extends Controller {
       $reservation->price = $item->price;
       $reservation->amount = $item->price;
       $reservation->save();
-      return redirect('seleccionar-horarios/'.$reservation->id);
+      return redirect('reservas/seleccionar-horarios/'.$reservation->id);
     }
     return view('reservation::process.reservas-'.$step, $array);
   }
@@ -129,6 +129,7 @@ class ProcessController extends Controller {
     $array['item'] = $accommodation;  
     $array['provider'] = $provider; 
     $array['reservation'] = $reservation; 
+    $array['accommodation'] = $reservation->accommodation;
     return view('reservation::process.reservas-4', $array);
   }
 
@@ -147,6 +148,137 @@ class ProcessController extends Controller {
       return redirect($accommodation->reservation_link.'/'.$accommodation->id.'/'.$reservation->id)->with('message_success', 'Su proceso de reserva fue iniciado exitosamente, ahora debe seleccionar una fecha/hora.');
     } else {
       return redirect($this->prev)->with('message_error', 'Hubo un error al iniciar su proceso de reserva.');
+    }
+  }
+
+  /* Ruta POST para confirmar su compra */
+  public function postFinalizarReserva(Request $request) {
+    $accommodation = \Solunes\Reservation\App\Accommodation::find($request->input('accommodation_id'));
+    $reservation = \Solunes\Reservation\App\Reservation::find($request->input('reservation_id'));
+    if($accommodation&&$reservation&&in_array($reservation->status,['holding','pre-reserve','sale'])){
+      if($reservation->user_id&&$reservation->customer_id){
+        if(!auth()->check()){
+          return redirect($this->prev)->with('message_error', 'Debe tener una cuenta para tomar esta reserva, inicie nuevamente.');
+        } else if(auth()->user()->id!=$reservation->user_id){
+          return redirect($this->prev)->with('message_error', 'Su usuario no es igual al de la reserva seleccionada.');
+        }
+      }
+    } else {
+      return redirect($this->prev)->with('message_error', 'Hubo un error para realizar esta reserva.');
+    }
+    if(auth()->check()){
+      $rules = \Solunes\Reservation\App\Reservation::$rules_reservation_send;
+    } else {
+      $rules = \Solunes\Reservation\App\Reservation::$rules_reservation_send;
+    }
+    if(!config('sales.ask_invoice')){
+      unset($rules['nit_number']);
+      unset($rules['nit_social']);
+    }
+    $validator = \Validator::make($request->all(), $rules);
+    if(!$reservation||!$accommodation||!$validator->passes()){
+      return redirect($this->prev)->with('message_error', 'Debe llenar todos los campos obligatorios.')->withErrors($validator)->withInput();
+    } else {
+
+      // User
+      if(config('solunes.customer')){
+        $customer = \Sales::customerRegistration($request);
+        $user = $customer->user;
+      } else {
+        $customer = NULL;
+        $user = \Sales::userRegistration($request);
+      }
+      if(is_string($user)){
+        return redirect($this->prev)->with('message_error', 'Hubo un error al finalizar su registro: '.$user);
+      }
+
+      // Sale
+      $reservation->user_id = $user->id;
+      if($customer){
+        $reservation->customer_id = $customer->id;
+      }
+      if(config('sales.ask_invoice')){
+        $reservation->invoice = true;
+        $reservation->invoice_number = $request->input('nit_number');
+        $reservation->invoice_name = $request->input('nit_social');
+      } else {
+        $reservation->invoice = false;
+      }
+      $reservation->amount = $reservation->price * $reservation->counts;
+      $reservation->status = 'sale';
+      $datetime = date("Y-m-d H:i:s", strtotime(config('reservation.sale_deadline')));
+      $reservation->reservation_deadline = $datetime;
+      $reservation->save();
+
+      $sale_details = [];
+      $reservation_user = new \Solunes\Reservation\App\ReservationUser;
+      $reservation_user->parent_id = $reservation->id;
+      $reservation_user->first_name = $customer->name;
+      if(config('reservation.reservation_subuser_name')){
+        $reservation_user->last_name = $request->input('last_name');
+      }
+      if(config('reservation.reservation_subuser_username')){
+        $reservation_user->ci_number = $request->input('ci_number');
+      }
+      if(config('reservation.reservation_subuser_email')){
+        $reservation_user->email = $request->input('email');
+      }
+      if(config('reservation.reservation_subuser_cellphone')){
+        $reservation_user->cellphone = $request->input('cellphone');
+      }
+      $reservation_user->save();
+      $detail = $reservation->name.' ('.$reservation->initial_date.' '.$reservation->initial_time.' - ';
+      if($reservation->initial_date!=$reservation->end_date){
+        $detail .= $reservation->end_date.' ';
+      }
+      $detail .= $reservation->end_time.')';
+      $sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>$reservation->counts, 'amount'=>$reservation->price, 'detail'=>$detail];
+
+      if($reservation->counts>1){
+        foreach(range(2, $reservation->counts) as $subcount){
+          $reservation_user = new \Solunes\Reservation\App\ReservationUser;
+          $reservation_user->parent_id = $reservation->id;
+          if(config('reservation.reservation_subuser_name')){
+            $reservation_user->first_name = $request->input('first_name');
+            $reservation_user->last_name = $request->input('last_name');
+          } else {
+            $reservation_user->first_name = 'Subcliente #'.$subcount;
+          }
+          if(config('reservation.reservation_subuser_username')){
+            $reservation_user->ci_number = $request->input('ci_number');
+          }
+          if(config('reservation.reservation_subuser_cellphone')){
+            $reservation_user->cellphone = $request->input('cellphone');
+          }
+          if(config('reservation.reservation_subuser_email')){
+            $reservation_user->email = $request->input('email');
+          }
+          if(config('reservation.reservation_subuser_age')){
+            $reservation_user->age = $request->input('age');
+          }
+          $reservation_user->save();
+          //$sale_details[] = ['product_bridge_id'=>$accommodation->product_bridge->id, 'quantity'=>1, 'amount'=>$reservation->price, 'detail'=>$reservation->name.' - '.$reservation->initial_date.' '.$reservation->initial_time.' a '.$reservation->end_date.' '.$reservation->end_time];
+        }
+      }
+      $reservation->load('reservation_users');
+
+      $sale = \Sales::generateSale($reservation->user_id, $reservation->customer_id, $reservation->currency_id, $request->input('payment_method_id'), $reservation->invoice, $reservation->invoice_name, $reservation->invoice_number, $sale_details);
+      $reservation->sale_id = $sale->id;
+      $reservation->save();
+
+      // Send Email
+      $vars = ['@name@'=>$user->name, '@total_cost@'=>$sale->total_cost, '@sale_link@'=>url('process/sale/'.$sale->id)];
+      \FuncNode::make_email('new-sale', [$user->email], $vars);
+
+      $redirect = 'process/sale/'.$sale->id;
+
+      // Revisar redirección a método de pago antes.
+      if(config('sales.redirect_to_payment')){
+        $model = '\\'.$sale_payment->payment_method->model;
+        return \Payments::generateSalePayment($sale, $model, $redirect);
+      }
+
+      return redirect($redirect)->with('message_success', 'Su compra fue confirmada correctamente, ahora debe proceder al pago para finalizarla.');
     }
   }
 
@@ -203,7 +335,7 @@ class ProcessController extends Controller {
       }
       $reservation->save();
       // Marcar como preseleccionado para que otro no pueda comprar basandose en cupo y dar plazo para finalizar la reserva.
-      return redirect('finalizar-reserva/'.$reservation->id)->with('message_success', 'Su proceso de reserva fue realizado correctamente, ahora puede registrar sus datos y finalizarla.');
+      return redirect('reservas/finalizar-reserva/'.$reservation->id)->with('message_success', 'Su proceso de reserva fue realizado correctamente, ahora puede registrar sus datos y finalizarla.');
       //return redirect('reservations/finish-reservation/'.$accommodation->id.'/'.$reservation->id)->with('message_success', 'Su proceso de reserva fue realizado correctamente, ahora puede registrar sus datos y finalizarla.');
     } else {
       return redirect($this->prev)->with('message_error', 'Hubo un error al seleccionar su reserva.');

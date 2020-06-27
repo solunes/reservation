@@ -61,7 +61,7 @@
                           {{ $subitem->name }}
                       </div>
                       <div class="cart-footer">
-                          <a href="{{ url('reservaciones/3/'.$item->id.'/'.$subitem->id) }}" class="btn btn-primary">Seleccionar</a>
+                          <a href="{{ url('reservas/proceso/3/'.$item->id.'/'.$subitem->id) }}" class="btn btn-primary">Seleccionar</a>
                       </div>
                   </div>
                 </div>

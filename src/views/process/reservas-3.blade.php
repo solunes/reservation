@@ -84,7 +84,7 @@
                                     <div class="row content_date-x">
                                         <div class="col-md-4 col-sm-4 col-xs-4 center items_date-1">
                                           @if($past_week)
-                                            <a href="{{ url('seleccionar-horarios/'.$reservation->id.'/'.$past_week_date) }}" class="btn-options-date">
+                                            <a href="{{ url('reservas/seleccionar-horarios/'.$reservation->id.'/'.$past_week_date) }}" class="btn-options-date">
                                                 <h5>SEMANA ANTERIOR</h5>
                                             </a>
                                           @endif
@@ -94,7 +94,7 @@
                                         </div>
                                         <div class="col-md-4 col-sm-4 col-xs-4 center items_date-3">
                                           @if($next_week)
-                                            <a href="{{ url('seleccionar-horarios/'.$reservation->id.'/'.$next_week_date) }}" class="btn-options-date">
+                                            <a href="{{ url('reservas/seleccionar-horarios/'.$reservation->id.'/'.$next_week_date) }}" class="btn-options-date">
                                                 <h5>SIGUIENTE SEMANA</h5>
                                             </a>
                                           @endif

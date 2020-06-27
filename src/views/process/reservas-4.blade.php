@@ -60,66 +60,96 @@
                         <h3>POR FAVOR, CONFIRME SUS DATOS</h3>
                     </div>
                     <hr class="margin-nis">
-                    <div class="card-content border-middle-type">
-                        <div class="row margin-0">
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <form class="form-brd">
-                                    <div class="item-form">
+                    <form class="form-brd" method="post" action="{{ url('reservas/finalizar-reserva') }}">
+                        <div class="card-content border-middle-type">
+                            <div class="row margin-0">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="item-form row">
+                                      <div class="col-sm-4 right">
                                         <label>Nombre: <span class="required">*</span></label>
-                                        <input type="" name="" placeholder="Introduzca su nombre">
+                                      </div>
+                                      <div class="col-sm-8">
+                                        {!! Form::text('name', NULL, ['placeholder'=>'Introduzca su nombre']) !!}
+                                      </div>
                                     </div>
-                                    <div class="item-form">
+                                    <div class="item-form row">
+                                      <div class="col-sm-4 right">
                                         <label>Email: <span class="required">*</span></label>
-                                        <input type="" name="" placeholder="Introduzca dirección email">
+                                      </div>
+                                      <div class="col-sm-8">
+                                        {!! Form::email('email', NULL, ['placeholder'=>'Introduzca su email']) !!}
+                                      </div>
                                     </div>
-                                    <div class="item-form">
-                                        <label>Teléfono <span class="required">*</span></label>
-                                        <input type="" name="" placeholder="Introducir número de teléfono">
+                                    <div class="item-form row">
+                                      <div class="col-sm-4 right">
+                                        <label>Teléfono: <span class="required">*</span></label>
+                                      </div>
+                                      <div class="col-sm-8">
+                                        {!! Form::number('phone', NULL, ['placeholder'=>'Introducir número de teléfono']) !!}
+                                      </div>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="content_max">
-                                    <div class="title_brd content-items_brd">
-                                        {{ $item->name }}
+                                    <div class="item-form row">
+                                      <div class="col-sm-4 right">
+                                        <label>NIT: <span class="required">*</span></label>
+                                      </div>
+                                      <div class="col-sm-8">
+                                        {!! Form::number('nit_number', NULL, ['placeholder'=>'Introduzca su NIT']) !!}
+                                      </div>
                                     </div>
-                                    <table class="content-items_brd">
-                                        <tr>
-                                            <td class="item-brd">Fecha:</td>
-                                            <td class="item-brd"><strong>{{ $reservation->initial_date }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="item-brd">Empieza a las:</td>
-                                            <td class="item-brd"><strong>{{ $reservation->initial_time }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="item-brd">Proveedor / Lugar:</td>
-                                            <td class="item-brd"><strong>{{ $provider->name }}</strong></td>
-                                        </tr>
-                                    </table>
-                                    <div class="content-items_brd">
-                                        <div class="check-content">
-                                            <div class="check-type_2">
-                                                <input type="checkbox" name="accept_terms">
-                                                <label class="check-btn"></label>
+                                    <div class="item-form row">
+                                      <div class="col-sm-4 right">
+                                        <label>Razón Social: <span class="required">*</span></label>
+                                      </div>
+                                      <div class="col-sm-8">
+                                        {!! Form::text('nit_social', NULL, ['placeholder'=>'Introducir su razón social']) !!}
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="content_max">
+                                        <div class="title_brd content-items_brd">
+                                            {{ $item->name }}
+                                        </div>
+                                        <table class="content-items_brd">
+                                            <tr>
+                                                <td class="item-brd">Fecha:</td>
+                                                <td class="item-brd"><strong>{{ $reservation->initial_date }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="item-brd">Empieza a las:</td>
+                                                <td class="item-brd"><strong>{{ $reservation->initial_time }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="item-brd">Proveedor / Lugar:</td>
+                                                <td class="item-brd"><strong>{{ $provider->name }}</strong></td>
+                                            </tr>
+                                        </table>
+                                        <div class="content-items_brd">
+                                            <div class="check-content">
+                                                <div class="check-type_2">
+                                                    <input type="checkbox" name="accept_terms">
+                                                    <label class="check-btn"></label>
+                                                </div>
+                                                <label class="label-check"><a href="#">Acepto los Términos y condiciones de uso</a> <span class="required">*</span></label>
                                             </div>
-                                            <label class="label-check"><a href="#">Acepto los Términos y condiciones de uso</a> <span class="required">*</span></label>
                                         </div>
-                                    </div>
-                                    <div class="content-items_brd">
-                                        <div class="check-content">
-                                            <input type="checkbox" name="send_newsletter" id="other-options">
-                                            <label class="check-btn"></label>
-                                            <label for="other-options" class="label-check">¿Podemos enviarle promociones e información?</label>
+                                        <div class="content-items_brd">
+                                            <div class="check-content">
+                                                <input type="checkbox" name="send_newsletter" id="other-options">
+                                                <label class="check-btn"></label>
+                                                <label for="other-options" class="label-check">¿Podemos enviarle promociones e información?</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="content-items_brd">
-                                        <a href="#" class="btn_reservations">Reservar</a>
+                                        <div class="content-items_brd">
+                                            {!! Form::hidden('accommodation_id', $accommodation->id) !!}
+                                            {!! Form::hidden('reservation_id', $reservation->id) !!}
+                                            <button type="submit" class="btn_reservations">Reservar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
               </div>
           </div>
