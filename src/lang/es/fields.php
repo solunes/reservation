@@ -72,5 +72,6 @@ return [
     'image_ticket' => 'Imagen de Ticket',
     'ticket_code' => 'Código de Ticket',
     'manual_ticket_code' => 'Código Manual de Ticket',
-    
+    'provider' => 'Proveedor',
+
 ];
