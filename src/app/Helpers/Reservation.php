@@ -232,6 +232,18 @@ class Reservation {
       return $dates_array;
     }
 
+    public static function getAccommodationRange($accommodation) {
+      if(count($accommodation->accommodation_ranges)>0){
+        return $accommodation;
+      } else {
+        $parent_accommodation = $accommodation->parent;
+        if($parent_accommodation){
+          return \Reservation::getAccommodationRange($parent_accommodation);
+        }
+      }
+      return $accommodation;
+    }
+
     public static function getFinalAvailableTimes($accommodation, $date_start, $date_end) {
       $period = new \DatePeriod(
         new \DateTime($date_start),
@@ -239,10 +251,12 @@ class Reservation {
         new \DateTime($date_end)
       );
       $dates_array = [];
+      $real_accommodation = \Reservation::getAccommodationRange($accommodation);
       foreach($period as $date){
         $date_val = $date->format('Y-m-d');
         $date_day = 'd_0'.($date->format('w'));
-        foreach($accommodation->accommodation_ranges()->where('initial_day', $date_day)->get() as $accommodation_range){
+        $accommodation_ranges = $real_accommodation->accommodation_ranges()->where('initial_day', $date_day)->get();
+        foreach($accommodation_ranges as $accommodation_range){
           if(isset($dates_array[$accommodation_range->initial_time][$date_val])){
             $quantity = $dates_array[$accommodation_range->initial_time][$date_val]['quantity'] + 1;
             $dates_array[$accommodation_range->initial_time][$date_val] = ['initial_time'=>$accommodation_range->initial_time, 'end_time'=>$accommodation_range->end_time, 'quantity'=>$quantity];
