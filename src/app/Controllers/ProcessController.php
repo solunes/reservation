@@ -261,8 +261,8 @@ class ProcessController extends Controller {
         }
       }
       $reservation->load('reservation_users');
-
-      $sale = \Sales::generateSale($reservation->user_id, $reservation->customer_id, $reservation->currency_id, $request->input('payment_method_id'), $reservation->invoice, $reservation->invoice_name, $reservation->invoice_number, $sale_details);
+      $payment_method = \Solunes\Payments\App\PaymentMethod::where('code', config('payments.default_payment_method_code'))->first();
+      $sale = \Sales::generateSale($reservation->user_id, $reservation->customer_id, $reservation->currency_id, $payment_method->id, $reservation->invoice, $reservation->invoice_name, $reservation->invoice_number, $sale_details);
       $reservation->sale_id = $sale->id;
       $reservation->save();
 

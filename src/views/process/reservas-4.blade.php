@@ -85,9 +85,10 @@
                                         <label>Teléfono: <span class="required">*</span></label>
                                       </div>
                                       <div class="col-sm-8">
-                                        {!! Form::number('phone', NULL, ['placeholder'=>'Introducir número de teléfono']) !!}
+                                        {!! Form::number('cellphone', NULL, ['placeholder'=>'Introducir número de teléfono']) !!}
                                       </div>
                                     </div>
+                                    @if(!config('sales.ask_invoice')){
                                     <div class="item-form row">
                                       <div class="col-sm-4 right">
                                         <label>NIT: <span class="required">*</span></label>
@@ -104,6 +105,7 @@
                                         {!! Form::text('nit_social', NULL, ['placeholder'=>'Introducir su razón social']) !!}
                                       </div>
                                     </div>
+                                    @endif
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12">
                                     <div class="content_max">
