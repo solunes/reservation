@@ -65,6 +65,7 @@
                     </div>
                     @if(count($subitem->accommodation_childs)>0)
                       <div class="card-subfooter">
+                          <i class="icon-cash"></i> Desde Bs. {{ $subitem->price }}
                           <i class="icon-time"></i> {{ $subitem->duration_number }} {{ trans('reservation::admin.'.$subitem->duration_type) }}s
                       </div>
                       <div class="cart-footer">
@@ -72,6 +73,7 @@
                       </div>
                     @else
                       <div class="card-subfooter">
+                          <i class="icon-cash"></i> Bs. {{ $subitem->price }}
                           <i class="icon-time"></i> {{ $subitem->duration_number }} {{ trans('reservation::admin.'.$subitem->duration_type) }}s
                       </div>
                       <div class="cart-footer">
