@@ -33,8 +33,6 @@ class Reservation extends Model {
         'name'=>'required',
         'email'=>'required',
         'cellphone'=>'required',
-        'nit_number'=>'required',
-        'nit_social'=>'required',
     );
 
 	/* Creating rules */
