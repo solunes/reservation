@@ -274,8 +274,9 @@ class ProcessController extends Controller {
 
       // Revisar redirección a método de pago antes.
       if(config('sales.redirect_to_payment')){
+        $sale_payment = $sale->sale_payment;
         $model = '\\'.$sale_payment->payment_method->model;
-        return \Payments::generateSalePayment($sale, $model, $redirect);
+        return \Payments::generateSalePayment($sale, $model, $redirect, NULL);
       }
 
       return redirect($redirect)->with('message_success', 'Su compra fue confirmada correctamente, ahora debe proceder al pago para finalizarla.');
