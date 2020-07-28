@@ -11,25 +11,17 @@ class Provider extends Model {
 
 	/* Creating rules */
 	public static $rules_create = array(
-		'type'=>'required',
-		'interval'=>'required',
-		'pricing'=>'required',
-		'pricing_type'=>'required',
-		'min_advance_type'=>'required',
-		'max_advance_type'=>'required',
-		'active'=>'required',
+		'name'=>'required',
+		'image'=>'required',
+		'capacity'=>'required',
 	);
 
 	/* Updating rules */
 	public static $rules_edit = array(
 		'id'=>'required',
-		'type'=>'required',
-		'interval'=>'required',
-		'pricing'=>'required',
-		'pricing_type'=>'required',
-		'min_advance_type'=>'required',
-		'max_advance_type'=>'required',
-		'active'=>'required',
+		'name'=>'required',
+		'image'=>'required',
+		'capacity'=>'required',
 	);
     
     public function accommodations() {
