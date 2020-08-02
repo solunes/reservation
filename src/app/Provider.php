@@ -24,6 +24,10 @@ class Provider extends Model {
 		'capacity'=>'required',
 	);
     
+    public function agency() {
+        return $this->belongsTo('Solunes\Business\App\Agency');
+    }
+    
     public function accommodations() {
         return $this->hasMany('Solunes\Reservation\App\Accommodation');
     }

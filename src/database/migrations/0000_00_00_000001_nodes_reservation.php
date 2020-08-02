@@ -15,6 +15,9 @@ class NodesReservation extends Migration
         // Módulo de Reservas
         Schema::create('accommodations', function (Blueprint $table) {
             $table->increments('id');
+            if(config('business.agencies')){
+                $table->integer('agency_id')->nullable();
+            }
             $table->integer('parent_id')->nullable();
             $table->integer('provider_id')->nullable();
             $table->string('name')->nullable();
@@ -49,6 +52,9 @@ class NodesReservation extends Migration
         });
         Schema::create('providers', function (Blueprint $table) {
             $table->increments('id');
+            if(config('business.agencies')){
+                $table->integer('agency_id')->nullable();
+            }
             $table->string('name')->nullable();
             $table->string('image')->nullable();
             $table->integer('capacity')->nullable(); // Toma por defecto de evento
@@ -82,6 +88,7 @@ class NodesReservation extends Migration
         });
         Schema::create('accommodation_picks', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('agency_id')->nullable();
             $table->integer('parent_id')->unsigned();
             $table->integer('customer_id')->unsigned();
             $table->integer('reservation_id')->nullable();
@@ -96,6 +103,9 @@ class NodesReservation extends Migration
         });
         Schema::create('reservations', function (Blueprint $table) {
             $table->increments('id');
+            if(config('business.agencies')){
+                $table->integer('agency_id')->nullable();
+            }
             $table->integer('accommodation_id')->unsigned();
             $table->integer('provider_id')->nullable();
             $table->integer('user_id')->nullable();

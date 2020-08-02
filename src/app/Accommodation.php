@@ -41,6 +41,10 @@ class Accommodation extends Model {
     	}
     }
     
+    public function agency() {
+        return $this->belongsTo('Solunes\Business\App\Agency');
+    }
+    
     public function accommodation_ranges() {
         return $this->hasMany('Solunes\Reservation\App\AccommodationRange', 'parent_id');
     }

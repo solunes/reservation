@@ -68,6 +68,10 @@ class Reservation extends Model {
 		'status'=>'required',
 	);
     
+    public function agency() {
+        return $this->belongsTo('Solunes\Business\App\Agency');
+    }
+
     public function accommodation() {
         return $this->belongsTo('Solunes\Reservation\App\Accommodation');
     }
