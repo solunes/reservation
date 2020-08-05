@@ -35,4 +35,8 @@ class AccommodationRange extends Model {
         return $this->belongsTo('Solunes\Reservation\App\Accommodation');
     }
 
+    public function provider() {
+        return $this->belongsTo('Solunes\Reservation\App\Provider');
+    }
+
 }
