@@ -115,10 +115,10 @@ class ProcessController extends Controller {
     $array['date_start'] = $date_start; 
     $array['date_end'] = $date_end; 
     $array['reservation'] = $reservation; 
-      $array['available_dates'] = \Reservation::getNewAvailableDays($accommodation, $date_start, $date_end);
-      $array['available_times'] = \Reservation::getFinalAvailableTimes($accommodation, $date_start, $date_end);
-      $taken_dates = \Reservation::getTakenItems($provider, $date_start, $date_end);
-      $array['finalitems'] = \Reservation::getNewOccupancyHours($accommodation, $provider, $array['available_dates'], $array['available_times'], $taken_dates, $reservation);
+    $array['available_dates'] = \Reservation::getNewAvailableDays($accommodation, $date_start, $date_end);
+    $array['available_times'] = \Reservation::getFinalAvailableTimes($accommodation, $date_start, $date_end);
+    $taken_dates = \Reservation::getTakenItems($provider, $date_start, $date_end);
+    $array['finalitems'] = \Reservation::getNewOccupancyHours($accommodation, $provider, $array['available_dates'], $array['available_times'], $taken_dates, $reservation);
     return view('reservation::process.reservas-3', $array);
   }
 

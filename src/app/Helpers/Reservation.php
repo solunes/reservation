@@ -116,6 +116,8 @@ class Reservation {
       $days_duration = $new_end_time_timestamp - $initial_timestamp;
       $days_duration = round($days_duration / (60 * 60 * 24));
       $subarray[$initial_day][] = ['time_in'=>$initial_time,'days_duration'=>$days_duration,'time_out'=>$real_end_time];
+      \Log::info('next_end_time_timestamp: '.$next_end_time_timestamp);
+      \Log::info('end_timestamp: '.$end_timestamp);
       if($next_end_time_timestamp<=$end_timestamp){
         $subarray = \Reservation::getSeparateTimePeriods($subarray, $initial_day, $initial_date, $real_end_time, $end_timestamp, $minutes_interval);
       }
@@ -128,7 +130,12 @@ class Reservation {
           $items = $service->accommodation_ranges;
           $subarray = [];
           foreach($items as $item){
-            $subarray[$item->initial_day][] = ['time_in'=>$item->initial_time,'date_out'=>NULL,'time_out'=>$item->end_time];
+            $time_difference = time(date('Y-m-d '.$item->end_time)) - time(date('Y-m-d '.$item->initial_time));
+            \Log::info('time_difference: '.$time_difference);
+            //foreach(){
+              $subarray[$item->initial_day][] = ['time_in'=>$item->initial_time,'date_out'=>NULL,'time_out'=>$item->end_time];
+
+            //}
           }
           if($date_start==$date_end){
             $period = [$date_start];
@@ -244,6 +251,27 @@ class Reservation {
       return $accommodation;
     }
 
+    public static function getNewSeparateTimePeriods($subarray, $initial_date, $initial_time, $end_time, $minutes_interval) {
+      if(!$initial_date){
+        $initial_date = date('Y-m-d');
+      }
+      $end_timestamp = strtotime($initial_date.' '.$end_time);
+      $initial_timestamp = strtotime($initial_date.' '.$initial_time);
+      $new_end_time_timestamp = strtotime('+'.$minutes_interval.' minutes', $initial_timestamp);
+      $next_end_time_timestamp = strtotime('+'.$minutes_interval.' minutes', $new_end_time_timestamp);
+      $real_end_date = date('Y-m-d', $new_end_time_timestamp);
+      $real_end_time = date('H:i:s', $new_end_time_timestamp);
+      $days_duration = $new_end_time_timestamp - $initial_timestamp;
+      $days_duration = round($days_duration / (60 * 60 * 24));
+      $subarray[$initial_time][$initial_date] = ['initial_time'=>$initial_time,'end_time'=>$real_end_time,'quantity'=>1];
+      if($next_end_time_timestamp<=$end_timestamp){
+        //\Log::info('next_end_time_timestamp: '.$next_end_time_timestamp);
+        //\Log::info('end_timestamp: '.$end_timestamp);
+        $subarray = \Reservation::getNewSeparateTimePeriods($subarray, $initial_date, $real_end_time, $end_time, $minutes_interval);
+      }
+      return $subarray;
+    }
+
     public static function getFinalAvailableTimes($accommodation, $date_start, $date_end) {
       $period = new \DatePeriod(
         new \DateTime($date_start),
@@ -252,20 +280,30 @@ class Reservation {
       );
       $dates_array = [];
       $real_accommodation = \Reservation::getAccommodationRange($accommodation);
+      $minutes_interval = \Reservation::getMinutePeriods($accommodation);
+      \Log::info($accommodation->id);
+      $subarray = [];
       foreach($period as $date){
         $date_val = $date->format('Y-m-d');
         $date_day = 'd_0'.($date->format('w'));
         $accommodation_ranges = $real_accommodation->accommodation_ranges()->where('initial_day', $date_day)->get();
-        foreach($accommodation_ranges as $accommodation_range){
+        foreach($accommodation_ranges as $item){
+          $subarray = \Reservation::getNewSeparateTimePeriods($subarray, $date_val, $item->initial_time, $item->end_time, $minutes_interval);
+        }
+        /*foreach($accommodation_ranges as $accommodation_range){
+          
           if(isset($dates_array[$accommodation_range->initial_time][$date_val])){
             $quantity = $dates_array[$accommodation_range->initial_time][$date_val]['quantity'] + 1;
             $dates_array[$accommodation_range->initial_time][$date_val] = ['initial_time'=>$accommodation_range->initial_time, 'end_time'=>$accommodation_range->end_time, 'quantity'=>$quantity];
           } else {
             $dates_array[$accommodation_range->initial_time][$date_val] = ['initial_time'=>$accommodation_range->initial_time, 'end_time'=>$accommodation_range->end_time, 'quantity'=>1];
           }
-        }
+        }*/
       }
-      return $dates_array;
+      /*\Log::info('real_accommodation'.$real_accommodation->id);
+      \Log::info('method1'.json_encode($subarray));
+      \Log::info('method2'.json_encode($dates_array));*/
+      return $subarray;
     }
 
     public static function getNewOccupancyHours($accommodation, $provider, $available_dates, $available_times, $taken_dates, $reservation = NULL) {
