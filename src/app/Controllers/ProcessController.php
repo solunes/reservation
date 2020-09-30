@@ -84,6 +84,9 @@ class ProcessController extends Controller {
     }
     $reservation = \Solunes\Reservation\App\Reservation::find($reservation_id);
     $accommodation = $reservation->accommodation;
+    if($accommodation->type=='closed'){
+      return redirect('reservations/schedule-list/'.$accommodation->id.'/'.$reservation->id);
+    }
     $provider = $reservation->provider;
     $array['item'] = $accommodation;  
     $array['provider'] = $provider; 
